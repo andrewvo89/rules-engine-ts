@@ -9,13 +9,11 @@ import { isBooleanRuleValid } from './is-boolean-rule-valid';
 import { isGenericComparisonRuleValid } from './is-generic-comparison-rule-valid';
 import { isGenericTypeRuleValid } from './is-generic-type-rule-valid';
 import { isNumberRuleValid } from './is-number-rule-valid';
+import { isObject } from '../utils/is-object';
 import { isObjectKeyValid } from './is-object-key-valid';
 import { isObjectKeyValueValid } from './is-object-key-value-valid';
 import { isObjectValueValid } from './is-object-value-valid';
-import isPlainObject from 'lodash.isplainobject';
 import { isStringRuleValid } from './is-string-rule-valid';
-
-const isObject = (value: any): value is object => isPlainObject(value);
 
 export function run(union: RootUnion | Union, value: any): boolean {
   const validated = rootUnionSchema.or(unionSchema).parse(union);
