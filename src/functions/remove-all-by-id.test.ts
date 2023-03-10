@@ -4,7 +4,7 @@ import { randomUUID } from 'crypto';
 import { removeAllById } from './remove-all-by-id';
 
 test('remove many unions (deeply nested)', () => {
-  const root = createRoot();
+  const root = createRoot('and');
   const { union } = addUnionToUnion(root, { connector: 'and' });
   const { union: deepUnion } = addUnionToUnion(union, { connector: 'and' });
   deepUnion.id = union.id;
@@ -26,7 +26,7 @@ test('remove many unions (deeply nested)', () => {
 });
 
 test('remove non existent id', () => {
-  const root = createRoot();
+  const root = createRoot('and');
   const { union } = addUnionToUnion(root, { connector: 'and' });
 
   expect(root.rules).toContain(union);

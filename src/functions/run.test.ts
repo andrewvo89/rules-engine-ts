@@ -3,7 +3,7 @@ import { addUnionToUnion } from './add-union-to-union';
 import { createRoot } from './create-root';
 import { run } from './run';
 
-const root = createRoot();
+const root = createRoot('and');
 
 const { union } = addUnionToUnion(root, { connector: 'and' });
 const { rule: firstRule } = addRuleToUnion(union, {
@@ -67,7 +67,7 @@ test('test invalid rule', () => {
 });
 
 test('test no rules available', () => {
-  const noRuleRoot = createRoot();
+  const noRuleRoot = createRoot('and');
   const result = run(noRuleRoot, {});
   expect(result).toBeTruthy();
 });

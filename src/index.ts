@@ -1,3 +1,6 @@
+export * from './functions/add-rule-to-union';
+export * from './functions/add-union-to-union';
+export * from './functions/create-root';
 export * from './functions/find-any-by-id';
 export * from './functions/find-rule-by-id';
 export * from './functions/find-union-by-id';

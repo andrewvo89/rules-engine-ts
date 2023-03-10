@@ -5,7 +5,7 @@ import { getOrphaned } from './get-orphaned';
 import { randomUUID } from 'crypto';
 
 test('there are no orphaned rules', () => {
-  const root = createRoot();
+  const root = createRoot('and');
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
@@ -18,7 +18,7 @@ test('there are no orphaned rules', () => {
 });
 
 test('there are orhpaned rules', () => {
-  const root = createRoot();
+  const root = createRoot('and');
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });

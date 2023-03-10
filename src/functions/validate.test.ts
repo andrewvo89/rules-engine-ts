@@ -5,7 +5,7 @@ import { randomUUID } from 'crypto';
 import { validate } from './validate';
 
 test('rules engine passes validation', () => {
-  const root = createRoot();
+  const root = createRoot('and');
   addUnionToUnion(root, { connector: 'and' });
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
 
@@ -14,7 +14,7 @@ test('rules engine passes validation', () => {
 });
 
 test('rules engine validation fails validation with invalid union', () => {
-  const root = createRoot();
+  const root = createRoot('and');
 
   // @ts-expect-error
   root.rules.push({ entity: 'union', id: randomUUID(), connector: 'neither', parent_id: root.id, rules: [] });
@@ -25,7 +25,7 @@ test('rules engine validation fails validation with invalid union', () => {
 });
 
 test('rules engine validation fails validation with invalid rule', () => {
-  const root = createRoot();
+  const root = createRoot('and');
 
   root.rules.push({
     entity: 'rule',
@@ -44,7 +44,7 @@ test('rules engine validation fails validation with invalid rule', () => {
 });
 
 test('rules engine validation fails validation with orphaned rule', () => {
-  const root = createRoot();
+  const root = createRoot('and');
   addUnionToUnion(root, { connector: 'and' });
   const { rule } = addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   rule.parent_id = randomUUID();

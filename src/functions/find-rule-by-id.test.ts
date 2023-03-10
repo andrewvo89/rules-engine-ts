@@ -4,8 +4,7 @@ import { createRoot } from './create-root';
 import { findRuleById } from './find-rule-by-id';
 import { randomUUID } from 'crypto';
 
-const root = createRoot();
-root.connector = 'or';
+const root = createRoot('or');
 addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'alice' });
 const { union } = addUnionToUnion(root, { connector: 'and' });
