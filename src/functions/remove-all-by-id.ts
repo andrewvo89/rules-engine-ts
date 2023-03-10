@@ -1,7 +1,10 @@
 import { RootUnion, Union } from '../types/union';
 
+import { Rule } from '../types/rule';
+
 /**
  * Removes all rules or unions from a union and nested unions by id.
+ * Mutates the original union.
  * @export
  * @template T
  * @param {T} union
@@ -9,15 +12,11 @@ import { RootUnion, Union } from '../types/union';
  * @return {*}  {T}
  */
 export function removeAllById<T extends RootUnion | Union>(union: T, id: string): T {
-  const newRules: T['rules'] = [];
-  for (const ruleOrUnion of union.rules) {
-    if (ruleOrUnion.entity === 'union') {
-      removeAllById(ruleOrUnion, id);
-    }
+  union.rules = union.rules.reduce<(Rule | Union)[]>((list, ruleOrUnion) => {
     if (ruleOrUnion.id !== id) {
-      newRules.push(ruleOrUnion);
+      list.push(ruleOrUnion.entity === 'union' ? removeAllById(ruleOrUnion, id) : ruleOrUnion);
     }
-  }
-  union.rules = newRules;
+    return list;
+  }, []);
   return union;
 }

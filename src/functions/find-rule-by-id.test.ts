@@ -5,12 +5,14 @@ import { findRuleById } from './find-rule-by-id';
 import { randomUUID } from 'crypto';
 
 const root = createRoot('or');
+
 addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'alice' });
-const { union } = addUnionToUnion(root, { connector: 'and' });
+const union = addUnionToUnion(root, { connector: 'and' });
+
 addRuleToUnion(union, { field: 'age', operator: 'greater_than', type: 'number', value: 18 });
-const { rule } = addRuleToUnion(union, { field: 'age', operator: 'less_than', type: 'number', value: 30 });
-const { union: union2 } = addUnionToUnion(union, { connector: 'and' });
+const rule = addRuleToUnion(union, { field: 'age', operator: 'less_than', type: 'number', value: 30 });
+const union2 = addUnionToUnion(union, { connector: 'and' });
 
 test('find root union', () => {
   const result = findRuleById(root, root.id);
@@ -19,6 +21,7 @@ test('find root union', () => {
 
 test('find deeply nested rule', () => {
   const result = findRuleById(root, rule.id);
+  console.log('root', root);
   expect(result).toBe(rule);
 });
 

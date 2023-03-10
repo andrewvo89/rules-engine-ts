@@ -1,7 +1,6 @@
 {
   "name": "ts-rules-engine",
   "version": "1.0.0",
-  "main": "index.js",
   "repository": "https://github.com/andrewvo89/ts-rules-engine.git",
   "author": "Andrew Vo-Nguyen <hello@andrewvo.co> (https://andrewvo.co)",
   "scripts": {
@@ -43,6 +42,7 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
+  "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "files": [
     "lib/**/*",

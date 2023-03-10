@@ -9,7 +9,7 @@ test('there are no orphaned rules', () => {
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
-  const { union } = addUnionToUnion(root, { connector: 'and' });
+  const union = addUnionToUnion(root, { connector: 'and' });
   addRuleToUnion(union, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(union, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(union, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
@@ -22,10 +22,10 @@ test('there are orhpaned rules', () => {
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
-  const { union } = addUnionToUnion(root, { connector: 'and' });
+  const union = addUnionToUnion(root, { connector: 'and' });
   addRuleToUnion(union, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   addRuleToUnion(union, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
-  const { rule } = addRuleToUnion(union, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
+  const rule = addRuleToUnion(union, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   rule.parent_id = randomUUID();
   const result = getOrphaned(root);
   expect(result.length).toBe(1);

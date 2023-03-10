@@ -7,9 +7,8 @@ test('union is added to a union', () => {
   const newUnion: NewUnion = {
     connector: 'and',
   };
-  const { parent, union } = addUnionToUnion(root, newUnion);
-  expect(parent).toBe(root);
-  expect(parent.rules.length).toBe(1);
-  expect(parent.rules[0]).toBe(union);
+  const union = addUnionToUnion(root, newUnion);
+  expect(root.rules.length).toBe(1);
+  expect(root.rules[0]).toBe(union);
   expect(union.parent_id).toBe(root.id);
 });

@@ -5,8 +5,8 @@ import { run } from './run';
 
 const root = createRoot('and');
 
-const { union } = addUnionToUnion(root, { connector: 'and' });
-const { rule: firstRule } = addRuleToUnion(union, {
+const union = addUnionToUnion(root, { connector: 'and' });
+const firstRule = addRuleToUnion(union, {
   field: 'number',
   operator: 'greater_than',
   type: 'number',
@@ -27,7 +27,7 @@ addRuleToUnion(root, {
 });
 addRuleToUnion(root, { field: 'generic', operator: 'equals_to', type: 'generic_comparison', value: 'bob' });
 addRuleToUnion(root, { field: 'generic', operator: 'is_truthy', type: 'generic_type' });
-const { union: orUnion } = addUnionToUnion(root, { connector: 'or' });
+const orUnion = addUnionToUnion(root, { connector: 'or' });
 addRuleToUnion(orUnion, { field: 'number', operator: 'less_than', type: 'number', value: 30 });
 addRuleToUnion(orUnion, { field: 'string', operator: 'contains', type: 'string', value: 'bob' });
 

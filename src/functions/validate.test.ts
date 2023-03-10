@@ -46,7 +46,7 @@ test('rules engine validation fails validation with invalid rule', () => {
 test('rules engine validation fails validation with orphaned rule', () => {
   const root = createRoot('and');
   addUnionToUnion(root, { connector: 'and' });
-  const { rule } = addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
+  const rule = addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
   rule.parent_id = randomUUID();
 
   const result = validate(root);
