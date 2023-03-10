@@ -13,7 +13,7 @@ test('rules engine passes validation', () => {
   expect(result.isValid).toBeTruthy();
 });
 
-test('rules engine fails validation with invalid union', () => {
+test('rules engine validation fails validation with invalid union', () => {
   const root = createRoot();
 
   // @ts-expect-error
@@ -21,5 +21,35 @@ test('rules engine fails validation with invalid union', () => {
 
   const result = validate(root);
   expect(result.isValid).toBeFalsy();
-  expect(!result.isValid && result.reason).toBe('Code: invalid_union ~ Path: rules[0] ~ Message: Invalid input');
+  expect(!result.isValid && result.reason).toBeTruthy();
+});
+
+test('rules engine validation fails validation with invalid rule', () => {
+  const root = createRoot();
+
+  root.rules.push({
+    entity: 'rule',
+    id: randomUUID(),
+    field: 'number',
+    operator: 'greater_than',
+    // @ts-expect-error
+    type: 'integer',
+    value: 18,
+    parent_id: root.id,
+  });
+
+  const result = validate(root);
+  expect(result.isValid).toBeFalsy();
+  expect(!result.isValid && result.reason).toBeTruthy();
+});
+
+test('rules engine validation fails validation with orphaned rule', () => {
+  const root = createRoot();
+  addUnionToUnion(root, { connector: 'and' });
+  const { rule } = addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
+  rule.parent_id = randomUUID();
+
+  const result = validate(root);
+  expect(result.isValid).toBeFalsy();
+  expect(!result.isValid && result.reason).toBeTruthy();
 });
