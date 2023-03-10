@@ -1,5 +1,12 @@
 import { NumberRule } from '../types/rule';
 
+/**
+ * Check if a number rule is valid.
+ * @export
+ * @param {NumberRule} rule
+ * @param {number} value
+ * @return {*}  {boolean}
+ */
 export function isNumberRuleValid(rule: NumberRule, value: number): boolean {
   switch (rule.operator) {
     case 'equals_to':

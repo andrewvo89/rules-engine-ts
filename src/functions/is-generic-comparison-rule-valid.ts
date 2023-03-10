@@ -1,5 +1,12 @@
 import { GenericComparisonRule } from '../types/rule';
 
+/**
+ * Check if a generic comparison rule is valid.
+ * @export
+ * @param {GenericComparisonRule} rule
+ * @param {*} value
+ * @return {*}  {boolean}
+ */
 export function isGenericComparisonRuleValid(rule: GenericComparisonRule, value: any): boolean {
   switch (rule.operator) {
     case 'equals_to':

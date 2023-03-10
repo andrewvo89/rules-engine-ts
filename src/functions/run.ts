@@ -15,6 +15,13 @@ import { isObjectKeyValueRuleValid } from './is-object-key-value-rule-valid';
 import { isObjectValueRuleValid } from './is-object-value-rule-valid';
 import { isStringRuleValid } from './is-string-rule-valid';
 
+/**
+ * Run the rules engine against a value.
+ * @export
+ * @param {(RootUnion | Union)} union
+ * @param {*} value
+ * @return {*}  {boolean}
+ */
 export function run(union: RootUnion | Union, value: any): boolean {
   const validated = rootUnionSchema.or(unionSchema).parse(union);
   if (validated.rules.length === 0) {

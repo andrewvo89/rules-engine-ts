@@ -1,5 +1,12 @@
 import { ArrayLengthRule } from '../types/rule';
 
+/**
+ * Check if an array length rule is valid.
+ * @export
+ * @param {ArrayLengthRule} rule
+ * @param {any[]} value
+ * @return {*}  {boolean}
+ */
 export function isArrayLengthRuleValid(rule: ArrayLengthRule, value: any[]): boolean {
   switch (rule.operator) {
     case 'equals_to':

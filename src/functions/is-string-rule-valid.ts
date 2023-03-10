@@ -1,5 +1,12 @@
 import { StringRule } from '../types/rule';
 
+/**
+ * Check if a string rule is valid.
+ * @export
+ * @param {StringRule} rule
+ * @param {string} value
+ * @return {*}  {boolean}
+ */
 export function isStringRuleValid(rule: StringRule, value: string): boolean {
   const caseValue = rule.ignore_case ? value.toLowerCase().trim() : value.trim();
   const caseRuleValue = rule.ignore_case ? rule.value.toLowerCase().trim() : rule.value.trim();

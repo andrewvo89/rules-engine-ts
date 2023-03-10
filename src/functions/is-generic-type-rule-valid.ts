@@ -1,6 +1,13 @@
 import { GenericTypeRule } from '../types/rule';
 import isPlainObject from 'lodash.isplainobject';
 
+/**
+ * Check if a generic type rule is valid.
+ * @export
+ * @param {GenericTypeRule} rule
+ * @param {*} value
+ * @return {*}  {boolean}
+ */
 export function isGenericTypeRuleValid(rule: GenericTypeRule, value: any): boolean {
   switch (rule.operator) {
     case 'is_truthy':
