@@ -10,9 +10,9 @@ test('rule is added to a union', () => {
     type: 'string',
     value: 'bob',
   };
-  const { parent, rule } = addRuleToUnion(root, newRule);
-  expect(parent).toBe(root);
-  expect(parent.rules.length).toBe(1);
-  expect(parent.rules[0]).toBe(rule);
+  const { union, rule } = addRuleToUnion(root, newRule);
+  expect(union).toBe(root);
+  expect(union.rules.length).toBe(1);
+  expect(union.rules[0]).toBe(rule);
   expect(rule.parent_id).toBe(root.id);
 });

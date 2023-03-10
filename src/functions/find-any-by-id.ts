@@ -5,15 +5,15 @@ import { Rule } from '../types/rule';
 /**
  * Find a rule or a union by id.
  * @export
- * @param {(RootUnion | Union)} parent
+ * @param {(RootUnion | Union)} union
  * @param {string} id
  * @return {*}  {(RootUnion | Union | Rule | undefined)}
  */
-export function findAnyById(parent: RootUnion | Union, id: string): RootUnion | Union | Rule | undefined {
-  if (parent.id === id) {
-    return parent;
+export function findAnyById(union: RootUnion | Union, id: string): RootUnion | Union | Rule | undefined {
+  if (union.id === id) {
+    return union;
   }
-  return parent.rules.reduce<Union | RootUnion | Rule | undefined>((foundUnion, ruleOrUnion) => {
+  return union.rules.reduce<Union | RootUnion | Rule | undefined>((foundUnion, ruleOrUnion) => {
     if (foundUnion) {
       return foundUnion;
     }
