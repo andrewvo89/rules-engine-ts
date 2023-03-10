@@ -12,4 +12,4 @@ export type Union = {
 
 export type RootUnion = z.infer<typeof rootUnionSchema>;
 
-export type NewUnionParams = Omit<Union, 'id' | 'parent_id' | 'entity' | 'rules'>;
+export type NewUnion = Omit<Union, 'id' | 'parent_id' | 'entity' | 'rules'>;

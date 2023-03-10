@@ -44,7 +44,7 @@ export const booleanRuleSchema = z.object({
 export const arrayValueRuleSchema = z.object({
   type: z.literal('array_value'),
   field: z.string(),
-  operator: z.union([z.literal('contains'), z.literal('not_contains'), z.literal('contains_all')]),
+  operator: z.union([z.literal('contains'), z.literal('does_not_contain'), z.literal('contains_all')]),
   value: z.any(),
 });
 
@@ -61,37 +61,30 @@ export const arrayLengthRuleSchema = z.object({
   ]),
   value: z.number(),
 });
-// export const arrayRuleSchema = z.discriminatedUnion('operator', [arrayValueRuleSchema, arrayLengthRuleSchema]);
 
 export const objectKeyRuleSchema = z.object({
   type: z.literal('object_key'),
   field: z.string(),
-  operator: z.union([z.literal('contains'), z.literal('not_contains')]),
+  operator: z.union([z.literal('contains'), z.literal('does_not_contain')]),
   value: z.string(),
 });
 
 export const objectValueRuleSchema = z.object({
   type: z.literal('object_value'),
   field: z.string(),
-  operator: z.union([z.literal('contains'), z.literal('not_contains')]),
+  operator: z.union([z.literal('contains'), z.literal('does_not_contain')]),
   value: z.any(),
 });
 
 export const objectKeyValuePairRuleSchema = z.object({
   type: z.literal('object_key_value'),
   field: z.string(),
-  operator: z.union([z.literal('contains'), z.literal('not_contains')]),
+  operator: z.union([z.literal('contains'), z.literal('does_not_contain')]),
   value: z.object({
     key: z.string(),
     value: z.any(),
   }),
 });
-
-// export const objectRuleSchema = z.discriminatedUnion('operator', [
-//   objectContainsKeyRuleSchema,
-//   objectContainsValueRuleSchema,
-//   objectContainsKeyValuePairRuleSchema,
-// ]);
 
 export const genericComparisonRuleSchema = z.object({
   type: z.literal('generic_comparison'),
@@ -129,12 +122,6 @@ export const genericTypeRuleSchema = z.object({
     z.literal('is_not_object'),
   ]),
 });
-
-// export const genericRuleSchema = z.discriminatedUnion('operator', [
-//   objectContainsKeyRuleSchema,
-//   objectContainsValueRuleSchema,
-//   objectContainsKeyValuePairRuleSchema,
-// ]);
 
 export const ruleSchema = z.discriminatedUnion('type', [
   ruleBaseSchema.merge(stringRuleSchema),

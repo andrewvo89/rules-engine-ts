@@ -4,7 +4,7 @@ export function isArrayValueRuleValid(rule: ArrayValueRule, value: any[]): boole
   switch (rule.operator) {
     case 'contains':
       return value.includes(rule.value);
-    case 'not_contains':
+    case 'does_not_contain':
       return !value.includes(rule.value);
     case 'contains_all':
       return value.every((v) => v === rule.value);

@@ -3,21 +3,20 @@ import { rootUnionSchema, unionSchema } from '../validations/union';
 
 import { Rule } from '../types/rule';
 import get from 'lodash.get';
-import { isArrayLengthRuleValid } from './is-array-length-valid';
-import { isArrayValueRuleValid } from './is-array-value-valid';
+import { isArrayLengthRuleValid } from './is-array-length-rule-valid';
+import { isArrayValueRuleValid } from './is-array-value-rule-valid';
 import { isBooleanRuleValid } from './is-boolean-rule-valid';
 import { isGenericComparisonRuleValid } from './is-generic-comparison-rule-valid';
 import { isGenericTypeRuleValid } from './is-generic-type-rule-valid';
 import { isNumberRuleValid } from './is-number-rule-valid';
 import { isObject } from '../utils/is-object';
-import { isObjectKeyValid } from './is-object-key-valid';
-import { isObjectKeyValueValid } from './is-object-key-value-valid';
-import { isObjectValueValid } from './is-object-value-valid';
+import { isObjectKeyRuleValid } from './is-object-key-rule-valid';
+import { isObjectKeyValueRuleValid } from './is-object-key-value-rule-valid';
+import { isObjectValueRuleValid } from './is-object-value-rule-valid';
 import { isStringRuleValid } from './is-string-rule-valid';
 
 export function run(union: RootUnion | Union, value: any): boolean {
   const validated = rootUnionSchema.or(unionSchema).parse(union);
-  console.log(' validated', validated);
   if (validated.rules.length === 0) {
     return true;
   }
@@ -52,15 +51,15 @@ export function run(union: RootUnion | Union, value: any): boolean {
 
     if (isObject(resolved)) {
       if (ruleOrUnion.type === 'object_key') {
-        return isObjectKeyValid(ruleOrUnion, resolved);
+        return isObjectKeyRuleValid(ruleOrUnion, resolved);
       }
 
       if (ruleOrUnion.type === 'object_value') {
-        return isObjectValueValid(ruleOrUnion, resolved);
+        return isObjectValueRuleValid(ruleOrUnion, resolved);
       }
 
       if (ruleOrUnion.type === 'object_key_value') {
-        return isObjectKeyValueValid(ruleOrUnion, resolved);
+        return isObjectKeyValueRuleValid(ruleOrUnion, resolved);
       }
     }
 
@@ -71,8 +70,6 @@ export function run(union: RootUnion | Union, value: any): boolean {
     if (ruleOrUnion.type === 'generic_type') {
       return isGenericTypeRuleValid(ruleOrUnion, resolved);
     }
-
-    return false;
   };
 
   // If the joiner is an AND, then all rules must be true

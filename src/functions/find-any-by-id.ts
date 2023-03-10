@@ -7,12 +7,15 @@ export function findAnyById(parent: RootUnion | Union, id: string): RootUnion | 
     return parent;
   }
   return parent.rules.reduce<Union | RootUnion | Rule | undefined>((foundUnion, ruleOrUnion) => {
-    if (foundUnion || ruleOrUnion.entity === 'rule') {
+    if (foundUnion) {
       return foundUnion;
     }
     if (ruleOrUnion.id === id) {
       return ruleOrUnion;
     }
-    return findAnyById(ruleOrUnion, id);
+    if (ruleOrUnion.entity === 'union') {
+      return findAnyById(ruleOrUnion, id);
+    }
+    return foundUnion;
   }, undefined);
 }
