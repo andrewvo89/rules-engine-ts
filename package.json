@@ -35,7 +35,8 @@
   "dependencies": {
     "lodash.get": "^4.4.2",
     "lodash.isplainobject": "^4.0.6",
-    "zod": "^3.21.2"
+    "zod": "^3.21.2",
+    "zod-error": "^1.5.0"
   },
   "config": {
     "commitizen": {
