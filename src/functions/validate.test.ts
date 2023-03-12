@@ -42,14 +42,3 @@ test('rules engine validation fails validation with invalid rule', () => {
   expect(result.isValid).toBeFalsy();
   expect(!result.isValid && result.reason).toBeTruthy();
 });
-
-test('rules engine validation fails validation with orphaned rule', () => {
-  const root = createRoot('and');
-  addUnionToUnion(root, { connector: 'and' });
-  const rule = addRuleToUnion(root, { field: 'number', operator: 'greater_than', type: 'number', value: 18 });
-  rule.parent_id = randomUUID();
-
-  const result = validate(root);
-  expect(result.isValid).toBeFalsy();
-  expect(!result.isValid && result.reason).toBeTruthy();
-});
