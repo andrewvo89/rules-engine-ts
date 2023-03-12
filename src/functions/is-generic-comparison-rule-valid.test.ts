@@ -1,8 +1,8 @@
-import { GenericComparisonRule } from '../types/rule';
+import { NewGenericComparisonRule } from '../types/rule';
 import { isGenericComparisonRuleValid } from './is-generic-comparison-rule-valid';
 
 test('value is equal to', () => {
-  const rule: GenericComparisonRule = {
+  const rule: NewGenericComparisonRule = {
     field: 'names',
     operator: 'equals_to',
     type: 'generic_comparison',
@@ -13,7 +13,7 @@ test('value is equal to', () => {
 });
 
 test('value does not equal to', () => {
-  const rule: GenericComparisonRule = {
+  const rule: NewGenericComparisonRule = {
     field: 'names',
     operator: 'does_not_equal_to',
     type: 'generic_comparison',
@@ -24,7 +24,7 @@ test('value does not equal to', () => {
 });
 
 test('value is greater than', () => {
-  const rule: GenericComparisonRule = {
+  const rule: NewGenericComparisonRule = {
     field: 'names',
     operator: 'greater_than',
     type: 'generic_comparison',
@@ -35,7 +35,7 @@ test('value is greater than', () => {
 });
 
 test('value is greater than or equal to', () => {
-  const rule: GenericComparisonRule = {
+  const rule: NewGenericComparisonRule = {
     field: 'names',
     operator: 'greater_than_or_equal_to',
     type: 'generic_comparison',
@@ -46,7 +46,7 @@ test('value is greater than or equal to', () => {
 });
 
 test('value is less than', () => {
-  const rule: GenericComparisonRule = {
+  const rule: NewGenericComparisonRule = {
     field: 'names',
     operator: 'less_than',
     type: 'generic_comparison',
@@ -57,7 +57,7 @@ test('value is less than', () => {
 });
 
 test('value is less than or equal to', () => {
-  const rule: GenericComparisonRule = {
+  const rule: NewGenericComparisonRule = {
     field: 'names',
     operator: 'less_than_or_equal_to',
     type: 'generic_comparison',
@@ -68,7 +68,7 @@ test('value is less than or equal to', () => {
 });
 
 test('invalid operator is handled', () => {
-  const rule: GenericComparisonRule = {
+  const rule: NewGenericComparisonRule = {
     field: 'names',
     // @ts-expect-error
     operator: 'is_more_awesome_than',

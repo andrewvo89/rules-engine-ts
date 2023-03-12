@@ -1,8 +1,8 @@
-import { GenericTypeRule } from '../types/rule';
+import { NewGenericTypeRule } from '../types/rule';
 import { isGenericTypeRuleValid } from './is-generic-type-rule-valid';
 
 test('value is truth', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_truthy',
     type: 'generic_type',
@@ -12,7 +12,7 @@ test('value is truth', () => {
 });
 
 test('value is falsey', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_falsey',
     type: 'generic_type',
@@ -22,7 +22,7 @@ test('value is falsey', () => {
 });
 
 test('value is null', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_null',
     type: 'generic_type',
@@ -32,7 +32,7 @@ test('value is null', () => {
 });
 
 test('value is not null', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_not_null',
     type: 'generic_type',
@@ -42,7 +42,7 @@ test('value is not null', () => {
 });
 
 test('value is undefined', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_undefined',
     type: 'generic_type',
@@ -52,7 +52,7 @@ test('value is undefined', () => {
 });
 
 test('value is not undefined', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_not_undefined',
     type: 'generic_type',
@@ -62,7 +62,7 @@ test('value is not undefined', () => {
 });
 
 test('value is string', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_string',
     type: 'generic_type',
@@ -72,7 +72,7 @@ test('value is string', () => {
 });
 
 test('value is not string', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_not_string',
     type: 'generic_type',
@@ -82,7 +82,7 @@ test('value is not string', () => {
 });
 
 test('value is number', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_number',
     type: 'generic_type',
@@ -92,7 +92,7 @@ test('value is number', () => {
 });
 
 test('value is not number', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_not_number',
     type: 'generic_type',
@@ -102,7 +102,7 @@ test('value is not number', () => {
 });
 
 test('value is boolean', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_boolean',
     type: 'generic_type',
@@ -112,7 +112,7 @@ test('value is boolean', () => {
 });
 
 test('value is not boolean', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_not_boolean',
     type: 'generic_type',
@@ -122,7 +122,7 @@ test('value is not boolean', () => {
 });
 
 test('value is array', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_array',
     type: 'generic_type',
@@ -132,7 +132,7 @@ test('value is array', () => {
 });
 
 test('value is not array', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_not_array',
     type: 'generic_type',
@@ -142,7 +142,7 @@ test('value is not array', () => {
 });
 
 test('value is object', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_object',
     type: 'generic_type',
@@ -152,7 +152,7 @@ test('value is object', () => {
 });
 
 test('value is not array', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     operator: 'is_not_object',
     type: 'generic_type',
@@ -162,7 +162,7 @@ test('value is not array', () => {
 });
 
 test('invalid operator is handled', () => {
-  const rule: GenericTypeRule = {
+  const rule: NewGenericTypeRule = {
     field: 'name',
     // @ts-expect-error
     operator: 'is_more_awesome_than',

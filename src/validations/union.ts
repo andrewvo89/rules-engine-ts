@@ -11,8 +11,8 @@ export const unionSchema: z.ZodType<Union> = z.object({
 });
 
 export const rootUnionSchema = z.object({
-  id: z.string(),
   entity: z.literal('root_union'),
+  id: z.string(),
   connector: z.union([z.literal('and'), z.literal('or')]),
   rules: z.array(ruleSchema.or(unionSchema)),
 });

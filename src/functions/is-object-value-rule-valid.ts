@@ -1,13 +1,13 @@
-import { ObjectValueRule } from '../types/rule';
+import { NewObjectValueRule } from '../types/rule';
 
 /**
  * Check if an object value rule is valid.
  * @export
- * @param {ObjectValueRule} rule
+ * @param {NewObjectValueRule} rule
  * @param {object} value
  * @return {*}  {boolean}
  */
-export function isObjectValueRuleValid(rule: ObjectValueRule, value: object): boolean {
+export function isObjectValueRuleValid(rule: NewObjectValueRule, value: object): boolean {
   const values = Object.values(value);
   const contains = values.includes(rule.value);
   switch (rule.operator) {

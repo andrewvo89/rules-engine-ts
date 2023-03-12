@@ -1,12 +1,12 @@
 import { z } from 'zod';
 
-export const ruleBaseSchema = z.object({
+export const baseRuleSchema = z.object({
+  entity: z.literal('rule'),
   id: z.string(),
   parent_id: z.string(),
-  entity: z.literal('rule'),
 });
 
-export const stringRuleSchema = z.object({
+export const baseStringRuleSchema = z.object({
   type: z.literal('string'),
   field: z.string(),
   operator: z.union([
@@ -17,11 +17,13 @@ export const stringRuleSchema = z.object({
     z.literal('starts_with'),
     z.literal('ends_with'),
   ]),
+  value: z.string(),
   ignore_case: z.boolean().optional(),
-  value: z.string().min(1),
 });
 
-export const numberRuleSchema = z.object({
+export const stringRuleSchema = baseRuleSchema.merge(baseStringRuleSchema);
+
+export const baseNumberRuleSchema = z.object({
   type: z.literal('number'),
   field: z.string(),
   operator: z.union([
@@ -35,20 +37,26 @@ export const numberRuleSchema = z.object({
   value: z.number(),
 });
 
-export const booleanRuleSchema = z.object({
+export const numberRuleSchema = baseRuleSchema.merge(baseNumberRuleSchema);
+
+export const baseBooleanRuleSchema = z.object({
   type: z.literal('boolean'),
   field: z.string(),
   operator: z.union([z.literal('is_true'), z.literal('is_false')]),
 });
 
-export const arrayValueRuleSchema = z.object({
+export const booleanRuleSchema = baseRuleSchema.merge(baseBooleanRuleSchema);
+
+export const baseArrayValueRuleSchema = z.object({
   type: z.literal('array_value'),
   field: z.string(),
   operator: z.union([z.literal('contains'), z.literal('does_not_contain'), z.literal('contains_all')]),
   value: z.any(),
 });
 
-export const arrayLengthRuleSchema = z.object({
+export const arrayValueRuleSchema = baseRuleSchema.merge(baseArrayValueRuleSchema);
+
+export const baseArrayLengthRuleSchema = z.object({
   type: z.literal('array_length'),
   field: z.string(),
   operator: z.union([
@@ -62,21 +70,27 @@ export const arrayLengthRuleSchema = z.object({
   value: z.number(),
 });
 
-export const objectKeyRuleSchema = z.object({
+export const arrayLengthRuleSchema = baseRuleSchema.merge(baseArrayLengthRuleSchema);
+
+export const baseObjectKeyRuleSchema = z.object({
   type: z.literal('object_key'),
   field: z.string(),
   operator: z.union([z.literal('contains'), z.literal('does_not_contain')]),
   value: z.string(),
 });
 
-export const objectValueRuleSchema = z.object({
+export const objectKeyRuleSchema = baseRuleSchema.merge(baseObjectKeyRuleSchema);
+
+export const baseObjectValueRuleSchema = z.object({
   type: z.literal('object_value'),
   field: z.string(),
   operator: z.union([z.literal('contains'), z.literal('does_not_contain')]),
   value: z.any(),
 });
 
-export const objectKeyValuePairRuleSchema = z.object({
+export const objectValueRuleSchema = baseRuleSchema.merge(baseObjectValueRuleSchema);
+
+export const baseObjectKeyValuePairRuleSchema = z.object({
   type: z.literal('object_key_value'),
   field: z.string(),
   operator: z.union([z.literal('contains'), z.literal('does_not_contain')]),
@@ -86,7 +100,9 @@ export const objectKeyValuePairRuleSchema = z.object({
   }),
 });
 
-export const genericComparisonRuleSchema = z.object({
+export const objectKeyValueRuleSchema = baseRuleSchema.merge(baseObjectKeyValuePairRuleSchema);
+
+export const baseGenericComparisonRuleSchema = z.object({
   type: z.literal('generic_comparison'),
   field: z.string(),
   operator: z.union([
@@ -100,7 +116,9 @@ export const genericComparisonRuleSchema = z.object({
   value: z.any(),
 });
 
-export const genericTypeRuleSchema = z.object({
+export const genericComparisonRuleSchema = baseRuleSchema.merge(baseGenericComparisonRuleSchema);
+
+export const baseGenericTypeRuleSchema = z.object({
   type: z.literal('generic_type'),
   field: z.string(),
   operator: z.union([
@@ -123,20 +141,9 @@ export const genericTypeRuleSchema = z.object({
   ]),
 });
 
-export const ruleSchema = z.discriminatedUnion('type', [
-  ruleBaseSchema.merge(stringRuleSchema),
-  ruleBaseSchema.merge(numberRuleSchema),
-  ruleBaseSchema.merge(booleanRuleSchema),
-  ruleBaseSchema.merge(arrayValueRuleSchema),
-  ruleBaseSchema.merge(arrayLengthRuleSchema),
-  ruleBaseSchema.merge(objectKeyRuleSchema),
-  ruleBaseSchema.merge(objectValueRuleSchema),
-  ruleBaseSchema.merge(objectKeyValuePairRuleSchema),
-  ruleBaseSchema.merge(genericComparisonRuleSchema),
-  ruleBaseSchema.merge(genericTypeRuleSchema),
-]);
+export const genericTypeRuleSchema = baseRuleSchema.merge(baseGenericTypeRuleSchema);
 
-export const newRuleSchema = z.union([
+export const ruleSchema = z.discriminatedUnion('type', [
   stringRuleSchema,
   numberRuleSchema,
   booleanRuleSchema,
@@ -144,7 +151,20 @@ export const newRuleSchema = z.union([
   arrayLengthRuleSchema,
   objectKeyRuleSchema,
   objectValueRuleSchema,
-  objectKeyValuePairRuleSchema,
+  objectKeyValueRuleSchema,
   genericComparisonRuleSchema,
   genericTypeRuleSchema,
+]);
+
+export const newRuleSchema = z.union([
+  baseStringRuleSchema,
+  baseNumberRuleSchema,
+  baseBooleanRuleSchema,
+  baseArrayValueRuleSchema,
+  baseArrayLengthRuleSchema,
+  baseObjectKeyRuleSchema,
+  baseObjectValueRuleSchema,
+  baseObjectKeyValuePairRuleSchema,
+  baseGenericComparisonRuleSchema,
+  baseGenericTypeRuleSchema,
 ]);

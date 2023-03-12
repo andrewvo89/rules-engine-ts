@@ -1,13 +1,13 @@
-import { NumberRule } from '../types/rule';
+import { NewNumberRule } from '../types/rule';
 
 /**
  * Check if a number rule is valid.
  * @export
- * @param {NumberRule} rule
+ * @param {NewNumberRule} rule
  * @param {number} value
  * @return {*}  {boolean}
  */
-export function isNumberRuleValid(rule: NumberRule, value: number): boolean {
+export function isNumberRuleValid(rule: NewNumberRule, value: number): boolean {
   switch (rule.operator) {
     case 'equals_to':
       return value === rule.value;

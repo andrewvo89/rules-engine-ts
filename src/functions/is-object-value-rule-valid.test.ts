@@ -1,10 +1,10 @@
-import { ObjectValueRule } from '../types/rule';
+import { NewObjectValueRule } from '../types/rule';
 import { isObjectValueRuleValid } from './is-object-value-rule-valid';
 
 const bob = { name: 'bob' };
 
 test('object value contains element', () => {
-  const rule: ObjectValueRule = {
+  const rule: NewObjectValueRule = {
     field: 'people',
     operator: 'contains',
     type: 'object_value',
@@ -15,7 +15,7 @@ test('object value contains element', () => {
 });
 
 test('object value does not contain element', () => {
-  const rule: ObjectValueRule = {
+  const rule: NewObjectValueRule = {
     field: 'people',
     operator: 'does_not_contain',
     type: 'object_value',
@@ -26,7 +26,7 @@ test('object value does not contain element', () => {
 });
 
 test('invalid operator is handled', () => {
-  const rule: ObjectValueRule = {
+  const rule: NewObjectValueRule = {
     field: 'people',
     // @ts-expect-error
     operator: 'is_more_awesome_than',

@@ -1,10 +1,10 @@
-import { ObjectKeyRule } from '../types/rule';
+import { NewObjectKeyRule } from '../types/rule';
 import { isObjectKeyRuleValid } from './is-object-key-rule-valid';
 
 const bob = { name: 'bob' };
 
 test('object key contains element', () => {
-  const rule: ObjectKeyRule = {
+  const rule: NewObjectKeyRule = {
     field: 'people',
     operator: 'contains',
     type: 'object_key',
@@ -15,7 +15,7 @@ test('object key contains element', () => {
 });
 
 test('object key does not contain element', () => {
-  const rule: ObjectKeyRule = {
+  const rule: NewObjectKeyRule = {
     field: 'people',
     operator: 'does_not_contain',
     type: 'object_key',
@@ -26,7 +26,7 @@ test('object key does not contain element', () => {
 });
 
 test('invalid operator is handled', () => {
-  const rule: ObjectKeyRule = {
+  const rule: NewObjectKeyRule = {
     field: 'people',
     // @ts-expect-error
     operator: 'is_more_awesome_than',

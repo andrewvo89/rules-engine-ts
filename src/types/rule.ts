@@ -1,40 +1,40 @@
 import {
-  arrayLengthRuleSchema,
-  arrayValueRuleSchema,
-  booleanRuleSchema,
-  genericComparisonRuleSchema,
-  genericTypeRuleSchema,
+  baseArrayLengthRuleSchema,
+  baseArrayValueRuleSchema,
+  baseBooleanRuleSchema,
+  baseGenericComparisonRuleSchema,
+  baseGenericTypeRuleSchema,
+  baseNumberRuleSchema,
+  baseObjectKeyRuleSchema,
+  baseObjectKeyValuePairRuleSchema,
+  baseObjectValueRuleSchema,
+  baseStringRuleSchema,
   newRuleSchema,
-  numberRuleSchema,
-  objectKeyRuleSchema,
-  objectKeyValuePairRuleSchema,
-  objectValueRuleSchema,
   ruleSchema,
-  stringRuleSchema,
 } from '../validations/rule';
 
 import { z } from 'zod';
 
 export type Rule = z.infer<typeof ruleSchema>;
 
-export type StringRule = z.infer<typeof stringRuleSchema>;
+export type NewStringRule = z.infer<typeof baseStringRuleSchema>;
 
-export type NumberRule = z.infer<typeof numberRuleSchema>;
+export type NewNumberRule = z.infer<typeof baseNumberRuleSchema>;
 
-export type BooleanRule = z.infer<typeof booleanRuleSchema>;
+export type NewBooleanRule = z.infer<typeof baseBooleanRuleSchema>;
 
-export type ArrayValueRule = z.infer<typeof arrayValueRuleSchema>;
+export type NewArrayValueRule = z.infer<typeof baseArrayValueRuleSchema>;
 
-export type ArrayLengthRule = z.infer<typeof arrayLengthRuleSchema>;
+export type NewArrayLengthRule = z.infer<typeof baseArrayLengthRuleSchema>;
 
-export type ObjectKeyRule = z.infer<typeof objectKeyRuleSchema>;
+export type NewObjectKeyRule = z.infer<typeof baseObjectKeyRuleSchema>;
 
-export type ObjectValueRule = z.infer<typeof objectValueRuleSchema>;
+export type NewObjectValueRule = z.infer<typeof baseObjectValueRuleSchema>;
 
-export type ObjectKeyValueRule = z.infer<typeof objectKeyValuePairRuleSchema>;
+export type NewObjectKeyValueRule = z.infer<typeof baseObjectKeyValuePairRuleSchema>;
 
-export type GenericComparisonRule = z.infer<typeof genericComparisonRuleSchema>;
+export type NewGenericComparisonRule = z.infer<typeof baseGenericComparisonRuleSchema>;
 
-export type GenericTypeRule = z.infer<typeof genericTypeRuleSchema>;
+export type NewGenericTypeRule = z.infer<typeof baseGenericTypeRuleSchema>;
 
 export type NewRule = z.infer<typeof newRuleSchema>;

@@ -1,13 +1,13 @@
-import { ArrayValueRule } from '../types/rule';
+import { NewArrayValueRule } from '../types/rule';
 
 /**
  * Check if an array value rule is valid.
  * @export
- * @param {ArrayValueRule} rule
+ * @param {NewArrayValueRule} rule
  * @param {any[]} value
  * @return {*}  {boolean}
  */
-export function isArrayValueRuleValid(rule: ArrayValueRule, value: any[]): boolean {
+export function isArrayValueRuleValid(rule: NewArrayValueRule, value: any[]): boolean {
   switch (rule.operator) {
     case 'contains':
       return value.includes(rule.value);

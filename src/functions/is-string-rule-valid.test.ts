@@ -1,8 +1,8 @@
-import { StringRule } from '../types/rule';
+import { NewStringRule } from '../types/rule';
 import { isStringRuleValid } from './is-string-rule-valid';
 
 test('string equals to', () => {
-  const rule: StringRule = {
+  const rule: NewStringRule = {
     field: 'people',
     operator: 'equals_to',
     type: 'string',
@@ -13,7 +13,7 @@ test('string equals to', () => {
 });
 
 test('string equals to (case insensitve)', () => {
-  const rule: StringRule = {
+  const rule: NewStringRule = {
     field: 'people',
     operator: 'equals_to',
     type: 'string',
@@ -25,7 +25,7 @@ test('string equals to (case insensitve)', () => {
 });
 
 test('string not equals to', () => {
-  const rule: StringRule = {
+  const rule: NewStringRule = {
     field: 'people',
     operator: 'does_not_equal_to',
     type: 'string',
@@ -36,7 +36,7 @@ test('string not equals to', () => {
 });
 
 test('string contains', () => {
-  const rule: StringRule = {
+  const rule: NewStringRule = {
     field: 'people',
     operator: 'contains',
     type: 'string',
@@ -47,7 +47,7 @@ test('string contains', () => {
 });
 
 test('string does not contain', () => {
-  const rule: StringRule = {
+  const rule: NewStringRule = {
     field: 'people',
     operator: 'does_not_contain',
     type: 'string',
@@ -58,7 +58,7 @@ test('string does not contain', () => {
 });
 
 test('string starts with', () => {
-  const rule: StringRule = {
+  const rule: NewStringRule = {
     field: 'people',
     operator: 'starts_with',
     type: 'string',
@@ -69,7 +69,7 @@ test('string starts with', () => {
 });
 
 test('string ends with', () => {
-  const rule: StringRule = {
+  const rule: NewStringRule = {
     field: 'people',
     operator: 'ends_with',
     type: 'string',
@@ -80,7 +80,7 @@ test('string ends with', () => {
 });
 
 test('invalid operator is handled', () => {
-  const rule: StringRule = {
+  const rule: NewStringRule = {
     field: 'people',
     // @ts-expect-error
     operator: 'is_more_awesome_than',

@@ -1,13 +1,13 @@
-import { GenericComparisonRule } from '../types/rule';
+import { NewGenericComparisonRule } from '../types/rule';
 
 /**
  * Check if a generic comparison rule is valid.
  * @export
- * @param {GenericComparisonRule} rule
+ * @param {NewGenericComparisonRule} rule
  * @param {*} value
  * @return {*}  {boolean}
  */
-export function isGenericComparisonRuleValid(rule: GenericComparisonRule, value: any): boolean {
+export function isGenericComparisonRuleValid(rule: NewGenericComparisonRule, value: any): boolean {
   switch (rule.operator) {
     case 'equals_to':
       return value === rule.value;

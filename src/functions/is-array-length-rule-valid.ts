@@ -1,13 +1,13 @@
-import { ArrayLengthRule } from '../types/rule';
+import { NewArrayLengthRule } from '../types/rule';
 
 /**
  * Check if an array length rule is valid.
  * @export
- * @param {ArrayLengthRule} rule
+ * @param {NewArrayLengthRule} rule
  * @param {any[]} value
  * @return {*}  {boolean}
  */
-export function isArrayLengthRuleValid(rule: ArrayLengthRule, value: any[]): boolean {
+export function isArrayLengthRuleValid(rule: NewArrayLengthRule, value: any[]): boolean {
   switch (rule.operator) {
     case 'equals_to':
       return value.length === rule.value;

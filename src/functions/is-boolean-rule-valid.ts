@@ -1,13 +1,13 @@
-import { BooleanRule } from '../types/rule';
+import { NewBooleanRule } from '../types/rule';
 
 /**
  * Check if a boolean rule is valid.
  * @export
- * @param {BooleanRule} rule
+ * @param {NewBooleanRule} rule
  * @param {boolean} value
  * @return {*}  {boolean}
  */
-export function isBooleanRuleValid(rule: BooleanRule, value: boolean): boolean {
+export function isBooleanRuleValid(rule: NewBooleanRule, value: boolean): boolean {
   switch (rule.operator) {
     case 'is_true':
       return value === true;

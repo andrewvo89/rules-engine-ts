@@ -1,13 +1,13 @@
-import { ObjectKeyRule } from '../types/rule';
+import { NewObjectKeyRule } from '../types/rule';
 
 /**
  * Check if an object key rule is valid.
  * @export
- * @param {ObjectKeyRule} rule
+ * @param {NewObjectKeyRule} rule
  * @param {object} value
  * @return {*}  {boolean}
  */
-export function isObjectKeyRuleValid(rule: ObjectKeyRule, value: object): boolean {
+export function isObjectKeyRuleValid(rule: NewObjectKeyRule, value: object): boolean {
   const keys = Object.keys(value);
   const contains = keys.includes(rule.value);
   switch (rule.operator) {

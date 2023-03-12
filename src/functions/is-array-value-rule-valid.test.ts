@@ -1,4 +1,4 @@
-import { ArrayValueRule } from '../types/rule';
+import { NewArrayValueRule } from '../types/rule';
 import { isArrayValueRuleValid } from './is-array-value-rule-valid';
 
 const bob = { name: 'bob' };
@@ -8,7 +8,7 @@ const people = [bob, alice];
 const all_bob = [bob, bob, bob, bob];
 
 test('array contains element', () => {
-  const rule: ArrayValueRule = {
+  const rule: NewArrayValueRule = {
     field: 'people',
     operator: 'contains',
     type: 'array_value',
@@ -19,7 +19,7 @@ test('array contains element', () => {
 });
 
 test('array does not contain element', () => {
-  const rule: ArrayValueRule = {
+  const rule: NewArrayValueRule = {
     field: 'people',
     operator: 'does_not_contain',
     type: 'array_value',
@@ -30,7 +30,7 @@ test('array does not contain element', () => {
 });
 
 test('array contains all of an element', () => {
-  const rule: ArrayValueRule = {
+  const rule: NewArrayValueRule = {
     field: 'people',
     operator: 'contains_all',
     type: 'array_value',
@@ -41,7 +41,7 @@ test('array contains all of an element', () => {
 });
 
 test('invalid operator is handled', () => {
-  const rule: ArrayValueRule = {
+  const rule: NewArrayValueRule = {
     field: 'people',
     // @ts-expect-error
     operator: 'is_more_awesome_than',
