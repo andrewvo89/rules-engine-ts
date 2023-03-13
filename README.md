@@ -107,7 +107,7 @@ If we console log the root we can see what our rules look like:
       type: "number",
       field: "age",
       operator: "greater_than",
-      value: 18,
+      value: 18
     },
     {
       entity: "union",
@@ -123,7 +123,7 @@ If we console log the root we can see what our rules look like:
           field: "name",
           operator: "equals_to",
           value: "bob",
-          ignore_case: true,
+          ignore_case: true
         },
         {
           entity: "rule",
@@ -133,12 +133,12 @@ If we console log the root we can see what our rules look like:
           field: "name",
           operator: "equals_to",
           value: "alice",
-          ignore_case: true,
-        },
-      ],
-    },
-  ],
-};
+          ignore_case: true
+        }
+      ]
+    }
+  ]
+}
 ```
 
 ## Installation
@@ -170,13 +170,15 @@ Current state of the Rules Engine:
   entity: "root_union",
   id: "0d7428af-10e4-481b-84a7-056946bd4f12",
   connector: "and",
-  rules: [],
-};
+  rules: []
+}
 ```
 
-### `addRuleToUnion(union: RootUnion | Union, newRule: NewRule): Rule`
+### `addRuleToUnion(parent: RootUnion | Union, newRule: NewRule): Rule`
 
 Adds a rule to a union or root union. The rules engine assigns a unique ID and automatically tags it with a `parent_id`. Returns the rule that was added.
+
+> Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
 
 Building on from the previous example:
 
@@ -204,14 +206,16 @@ Current state of the Rules Engine:
       field: "age",
       operator: "greater_than",
       value: 18,
-    },
-  ],
-};
+    }
+  ]
+}
 ```
 
 ### `addUnionToUnion(parent: RootUnion | Union, newUnion: NewUnion): Union`
 
 Adds a union to an existing union or root union. Returns the rule that was added.
+
+> Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
 
 Building on from the previous example:
 
@@ -268,11 +272,11 @@ Current state of the Rules Engine:
           operator: "equals_to",
           value: "alice",
           ignore_case: true,
-        },
-      ],
-    },
-  ],
-};
+        }
+      ]
+    }
+  ]
+}
 ```
 
 ### `run(union: RootUnion | Union, value: any): boolean`
@@ -374,9 +378,178 @@ console.log(validate(root));
 // }
 ```
 
+### `normalize<T extends Union | RootUnion>(union: T): T`
+
+Normaliztion is a process that ensures that the ruleset is in a consistent state. It performs the following mutations recursively:
+
+- Removes any unions without any rules
+- Removes any unions that do not conform to the type system
+- Removes any rules that do not conform to the type system
+- Updates all parent ids to match the parent union
+
+> Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
+
+```js
+import { addRuleToUnion, addUnionToUnion, createRoot, normalize } from 'ts-rules-engine';
+
+import { randomUUID } from 'crypto';
+
+const root = createRoot('or');
+
+const rule1 = addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
+const union = addUnionToUnion(root, { connector: 'and' });
+const rule2 = addRuleToUnion(union, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
+
+rule1.parent_id = randomUUID();
+rule2.type = 'number';
+// @ts-expect-error
+union.connector = 'invalid';
+
+console.log(root.rules); // Before normalization
+normalize(root);
+console.log(root.rules); // After normalization
+```
+
+Before normalization
+
+```js
+[
+  {
+    entity: 'rule',
+    id: 'c363faa4-e987-4748-b68e-20b6048a51a1',
+    parent_id: '0835cc47-5d59-419a-ab1d-7d65139956ab',
+    type: 'string',
+    field: 'name',
+    operator: 'contains',
+    value: 'bob',
+  },
+  {
+    entity: 'union',
+    id: '98d84349-6718-47d7-9059-4e4d517f397e',
+    parent_id: '28d2de5d-fb05-482e-9d63-b029ea75cc9c',
+    connector: 'invalid',
+    rules: [
+      {
+        entity: 'rule',
+        id: '983c6aad-643f-40e2-afa2-aea401327859',
+        parent_id: '98d84349-6718-47d7-9059-4e4d517f397e',
+        type: 'number',
+        field: 'name',
+        operator: 'contains',
+        value: 'bob',
+      },
+    ],
+  },
+];
+```
+
+After normalization
+
+```js
+[
+  {
+    entity: 'rule',
+    id: 'c363faa4-e987-4748-b68e-20b6048a51a1',
+    parent_id: '28d2de5d-fb05-482e-9d63-b029ea75cc9c',
+    type: 'string',
+    field: 'name',
+    operator: 'contains',
+    value: 'bob',
+  },
+];
+```
+
+### `updateRuleById(root: RootUnion, id: string, values: NewRule): Rule | undefined`
+
+Updates a rule by id. Returns the updated rule if found, otherwise returns undefined.
+
+> Note: This function mutates the input root union. Clone the union before passing it in if you want to maintain its original state.
+
+```js
+import { addRuleToUnion, createRoot, updateRuleById } from 'ts-rules-engine';
+
+const root = createRoot('and');
+const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
+
+console.log(root.rules[0]); // Before update
+updateRuleById(root, rule.id, { type: 'number', field: 'age', operator: 'less_than', value: 30 });
+console.log(root.rules[0]); // After update
+```
+
+Before update
+
+```js
+{
+  entity: 'rule',
+  id: 'cc3d4bab-783a-4683-a223-8dee979b0bf0',
+  parent_id: 'e0da0708-1fbf-4e64-887c-d7684b17dd00',
+  type: 'number',
+  field: 'age',
+  operator: 'greater_than',
+  value: 18
+}
+```
+
+After update
+
+```js
+{
+  entity: 'rule',
+  id: 'cc3d4bab-783a-4683-a223-8dee979b0bf0',
+  parent_id: 'e0da0708-1fbf-4e64-887c-d7684b17dd00',
+  type: 'number',
+  field: 'age',
+  operator: 'less_than',
+  value: 30
+}
+```
+
+### `updateUnionById(root: RootUnion, id: string, values: NewUnion): Union | RootUnion | undefined`
+
+Updates a union by id. Returns the updated union if found, otherwise returns undefined.
+
+> Note: This function mutates the input root union. Clone the union before passing it in if you want to maintain its original state.
+
+```js
+import { addUnionToUnion, createRoot, updateUnionById } from 'ts-rules-engine';
+
+const root = createRoot('and');
+const union = addUnionToUnion(root, { connector: 'and' });
+
+console.log(root.rules[0]); // Before update
+updateUnionById(root, union.id, { connector: 'or' });
+console.log(root.rules[0]); // After update
+```
+
+Before update
+
+```js
+{
+  entity: 'union',
+  id: 'b0a289a5-f02e-4bb4-bbbf-d148d1fc570f',
+  parent_id: '1ac8dad7-46c0-430b-9ad1-fdb8f1fd721a',
+  connector: 'and',
+  rules: []
+}
+```
+
+After update
+
+```js
+{
+  entity: 'union',
+  id: 'b0a289a5-f02e-4bb4-bbbf-d148d1fc570f',
+  parent_id: '1ac8dad7-46c0-430b-9ad1-fdb8f1fd721a',
+  connector: 'or',
+  rules: []
+}
+```
+
 ### `removeAllById<T extends RootUnion | Union>(union: T, id: string): T`
 
 Removes all rules and unions of a given id from a ruleset. Returns the updated ruleset.
+
+> Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
 
 ```js
 import { addRuleToUnion, addUnionToUnion, createRoot, removeAllById } from 'ts-rules-engine';
@@ -386,19 +559,9 @@ const union = addUnionToUnion(root, { connector: 'or' });
 const rule = addRuleToUnion(union, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 
 console.log(union.rules.length); // 1
-
 removeAllById(root, rule.id);
-
 console.log(union.rules.length); // 0
 ```
-
-### `updateUnionById(root: RootUnion, id: string, values: NewUnion): Union | RootUnion | undefined`
-
-Updates a union by id. Mutates the root union to include changes. Returns the updated union if found, otherwise returns undefined.
-
-### `updateRuleById(root: RootUnion, id: string, values: NewRule): Rule | undefined`
-
-Updates a rule by id. Mutates the root union to include changes. Returns the updated rule if found, otherwise returns undefined.
 
 ## Rule Specification
 
