@@ -594,7 +594,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | field    | string                     | The field to check. Supports nested properties, e.g. `users.admins[0].is_active`. |
 | operator | 'is_true' <br/> 'is_false' | The operator to use.                                                              |
 
-### array_value
+### type = array_value
 
 | Property | Value                                                    | Description                                                          |
 | -------- | -------------------------------------------------------- | -------------------------------------------------------------------- |
@@ -603,7 +603,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | operator | 'contains' <br/> 'does_not_contain' <br/> 'contains_all' | The operator to use.                                                 |
 | value    | any                                                      | The value to compare against.                                        |
 
-### array_length
+### type = array_length
 
 | Property | Value                                                                                                                                       | Description                                                          |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
@@ -612,7 +612,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | operator | 'equals_to' <br/> 'does_not_equal_to' <br/> 'greater_than' <br/> 'greater_than_or_equal_to' <br/> 'less_than' <br/> 'less_than_or_equal_to' | The operator to use.                                                 |
 | value    | number                                                                                                                                      | The value to compare against.                                        |
 
-### object_key
+### type = object_key
 
 | Property | Value                               | Description                                                             |
 | -------- | ----------------------------------- | ----------------------------------------------------------------------- |
@@ -630,7 +630,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | operator | 'contains' <br/> 'does_not_contain' | The operator to use.                                                 |
 | value    | any                                 | The value to compare against.                                        |
 
-### object_key_value
+### type = object_key_value
 
 | Property | Value                               | Description                                                          |
 | -------- | ----------------------------------- | -------------------------------------------------------------------- |
@@ -639,7 +639,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | operator | 'contains' <br/> 'does_not_contain' | The operator to use.                                                 |
 | value    | { key: 'string', value: 'any' }     | The value to compare against.                                        |
 
-### generic_comparison
+### type = generic_comparison
 
 | Property | Value                                                                                                                                       | Description                                                                              |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -647,7 +647,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | field    | string                                                                                                                                      | The field to check. Supports nested properties, e.g. `users.admins[0].unknown_property`. |
 | operator | 'equals_to' <br/> 'does_not_equal_to' <br/> 'greater_than' <br/> 'greater_than_or_equal_to' <br/> 'less_than' <br/> 'less_than_or_equal_to' | The operator to use.                                                                     |
 
-### generic_type
+### type = generic_type
 
 | Property | Value                                                                                                                                                                                                                                                                                                                   | Description                                                                              |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
