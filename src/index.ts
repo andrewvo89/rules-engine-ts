@@ -12,3 +12,5 @@ export * from './functions/update-union-by-id';
 export * from './functions/validate';
 export * from './types/rule';
 export * from './types/union';
+export * from './validations/rule';
+export * from './validations/union';

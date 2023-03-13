@@ -90,6 +90,7 @@ const union = addUnionToUnion(root, { connector: 'or' });
 addRuleToUnion(union, { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true });
 addRuleToUnion(union, { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true });
 
+// Run the rules engine
 const pass = run(root, { age: 19, name: 'Bob' });
 const fail = run(root, { age: 19, name: 'Carol' });
 
@@ -698,8 +699,8 @@ console.log(narrowAfterAdding);
   type: 'number',
   field: 'age',
   operator: 'greater_than',
-  value: 18,
-};
+  value: 18
+}
 ```
 
 ```js
@@ -710,8 +711,8 @@ console.log(narrowAfterAdding);
   type: 'number',
   field: 'age',
   operator: 'less_than',
-  value: 30,
-};
+  value: 30
+}
 ```
 
 Similarly, a union can also be pre-composed before adding it to the rules engine:
