@@ -2,8 +2,8 @@ import { addRuleToUnion } from './add-rule-to-union';
 import { addUnionToUnion } from './add-union-to-union';
 import { createRoot } from './create-root';
 import { findRuleById } from './find-rule-by-id';
-import { randomUUID } from 'crypto';
 import { updateRuleById } from './update-rule-by-id';
+import { v4 as uuidv4 } from 'uuid';
 
 const root = createRoot('or');
 addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
@@ -33,7 +33,7 @@ test('update a rule that exists', () => {
 });
 
 test('update a rule that does not exist', () => {
-  const updatedRule = updateRuleById(root, randomUUID(), {
+  const updatedRule = updateRuleById(root, uuidv4(), {
     field: 'age',
     operator: 'less_than',
     type: 'number',
@@ -47,7 +47,7 @@ test('update a rule that does not have a valid parent', () => {
   if (!foundRule) {
     throw new Error('Rule not found');
   }
-  foundRule.parent_id = randomUUID();
+  foundRule.parent_id = uuidv4();
   const updatedRule = updateRuleById(root, rule.id, {
     field: 'age',
     operator: 'less_than',

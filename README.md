@@ -392,7 +392,7 @@ Normaliztion is a process that ensures that the ruleset is in a consistent state
 ```js
 import { addRuleToUnion, addUnionToUnion, createRoot, normalize } from 'rules-engine-ts';
 
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 const root = createRoot('or');
 
@@ -400,7 +400,7 @@ const rule1 = addRuleToUnion(root, { field: 'name', operator: 'contains', type: 
 const union = addUnionToUnion(root, { connector: 'and' });
 const rule2 = addRuleToUnion(union, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 
-rule1.parent_id = randomUUID();
+rule1.parent_id = uuidv4();
 rule2.type = 'number';
 // @ts-expect-error
 union.connector = 'invalid';
@@ -594,7 +594,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | field    | string                     | The field to check. Supports nested properties, e.g. `users.admins[0].is_active`. |
 | operator | 'is_true' <br/> 'is_false' | The operator to use.                                                              |
 
-### type = array_value
+### type = 'array_value'
 
 | Property | Value                                                    | Description                                                          |
 | -------- | -------------------------------------------------------- | -------------------------------------------------------------------- |
@@ -603,7 +603,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | operator | 'contains' <br/> 'does_not_contain' <br/> 'contains_all' | The operator to use.                                                 |
 | value    | any                                                      | The value to compare against.                                        |
 
-### type = array_length
+### type = 'array_length'
 
 | Property | Value                                                                                                                                       | Description                                                          |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- |
@@ -612,7 +612,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | operator | 'equals_to' <br/> 'does_not_equal_to' <br/> 'greater_than' <br/> 'greater_than_or_equal_to' <br/> 'less_than' <br/> 'less_than_or_equal_to' | The operator to use.                                                 |
 | value    | number                                                                                                                                      | The value to compare against.                                        |
 
-### type = object_key
+### type = 'object_key'
 
 | Property | Value                               | Description                                                             |
 | -------- | ----------------------------------- | ----------------------------------------------------------------------- |
@@ -621,7 +621,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | operator | 'contains' <br/> 'does_not_contain' | The operator to use.                                                    |
 | value    | string                              | The value to compare against.                                           |
 
-### object_value
+### type = 'object_value'
 
 | Property | Value                               | Description                                                          |
 | -------- | ----------------------------------- | -------------------------------------------------------------------- |
@@ -630,7 +630,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | operator | 'contains' <br/> 'does_not_contain' | The operator to use.                                                 |
 | value    | any                                 | The value to compare against.                                        |
 
-### type = object_key_value
+### type = 'object_key_value'
 
 | Property | Value                               | Description                                                          |
 | -------- | ----------------------------------- | -------------------------------------------------------------------- |
@@ -639,7 +639,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | operator | 'contains' <br/> 'does_not_contain' | The operator to use.                                                 |
 | value    | { key: 'string', value: 'any' }     | The value to compare against.                                        |
 
-### type = generic_comparison
+### type = 'generic_comparison'
 
 | Property | Value                                                                                                                                       | Description                                                                              |
 | -------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |
@@ -647,7 +647,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 | field    | string                                                                                                                                      | The field to check. Supports nested properties, e.g. `users.admins[0].unknown_property`. |
 | operator | 'equals_to' <br/> 'does_not_equal_to' <br/> 'greater_than' <br/> 'greater_than_or_equal_to' <br/> 'less_than' <br/> 'less_than_or_equal_to' | The operator to use.                                                                     |
 
-### type = generic_type
+### type = 'generic_type'
 
 | Property | Value                                                                                                                                                                                                                                                                                                                   | Description                                                                              |
 | -------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------- |

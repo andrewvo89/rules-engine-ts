@@ -1,8 +1,8 @@
 import { addRuleToUnion } from './add-rule-to-union';
 import { addUnionToUnion } from './add-union-to-union';
 import { createRoot } from './create-root';
-import { randomUUID } from 'crypto';
 import { removeAllById } from './remove-all-by-id';
+import { v4 as uuidv4 } from 'uuid';
 
 test('remove many deeply nested union', () => {
   const root = createRoot('and');
@@ -31,7 +31,7 @@ test('remove non existent id', () => {
   expect(root.rules).toContain(union);
   expect(root.rules.length).toBe(1);
 
-  removeAllById(root, randomUUID());
+  removeAllById(root, uuidv4());
 
   expect(root.rules).toContain(union);
   expect(root.rules.length).toBe(1);

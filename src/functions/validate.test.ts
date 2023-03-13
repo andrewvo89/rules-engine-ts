@@ -1,7 +1,7 @@
 import { addRuleToUnion } from './add-rule-to-union';
 import { addUnionToUnion } from './add-union-to-union';
 import { createRoot } from './create-root';
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 import { validate } from './validate';
 
 test('rules engine passes validation', () => {
@@ -17,7 +17,7 @@ test('rules engine validation fails validation with invalid union', () => {
   const root = createRoot('and');
 
   // @ts-expect-error
-  root.rules.push({ entity: 'union', id: randomUUID(), connector: 'neither', parent_id: root.id, rules: [] });
+  root.rules.push({ entity: 'union', id: uuidv4(), connector: 'neither', parent_id: root.id, rules: [] });
 
   const result = validate(root);
   expect(result.isValid).toBeFalsy();
@@ -29,7 +29,7 @@ test('rules engine validation fails validation with invalid rule', () => {
 
   root.rules.push({
     entity: 'rule',
-    id: randomUUID(),
+    id: uuidv4(),
     field: 'number',
     operator: 'greater_than',
     // @ts-expect-error

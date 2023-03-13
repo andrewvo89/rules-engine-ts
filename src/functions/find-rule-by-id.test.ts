@@ -2,7 +2,7 @@ import { addRuleToUnion } from './add-rule-to-union';
 import { addUnionToUnion } from './add-union-to-union';
 import { createRoot } from './create-root';
 import { findRuleById } from './find-rule-by-id';
-import { randomUUID } from 'crypto';
+import { v4 as uuidv4 } from 'uuid';
 
 const root = createRoot('or');
 
@@ -30,6 +30,6 @@ test('find deeply nested union', () => {
 });
 
 test('find non existent rule', () => {
-  const result = findRuleById(root, randomUUID());
+  const result = findRuleById(root, uuidv4());
   expect(result).toBeUndefined();
 });

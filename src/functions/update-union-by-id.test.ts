@@ -2,8 +2,8 @@ import { addRuleToUnion } from './add-rule-to-union';
 import { addUnionToUnion } from './add-union-to-union';
 import { createRoot } from './create-root';
 import { findUnionById } from './find-union-by-id';
-import { randomUUID } from 'crypto';
 import { updateUnionById } from './update-union-by-id';
+import { v4 as uuidv4 } from 'uuid';
 
 const root = createRoot('or');
 addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
@@ -39,7 +39,7 @@ test('update a root union', () => {
 });
 
 test('update a union that does not exist', () => {
-  const updatedUnion = updateUnionById(root, randomUUID(), { connector: 'or' });
+  const updatedUnion = updateUnionById(root, uuidv4(), { connector: 'or' });
   expect(updatedUnion).toBeUndefined();
 });
 
@@ -51,7 +51,7 @@ test('update a union that does not have a valid parent', () => {
   if (foundUnion.entity === 'root_union') {
     throw new Error('Union is not the correct type');
   }
-  foundUnion.parent_id = randomUUID();
+  foundUnion.parent_id = uuidv4();
   const updatedUnion = updateUnionById(root, union.id, { connector: 'or' });
   expect(updatedUnion).toBeUndefined();
 });
