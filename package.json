@@ -1,7 +1,7 @@
 {
-  "name": "ts-rules-engine",
+  "name": "rules-engine-ts",
   "version": "1.0.0",
-  "repository": "https://github.com/andrewvo89/ts-rules-engine.git",
+  "repository": "https://github.com/andrewvo89/rules-engine-ts.git",
   "author": "Andrew Vo-Nguyen <hello@andrewvo.co> (https://andrewvo.co)",
   "scripts": {
     "build": "eslint && rm -r -f lib && tsc -p tsconfig.json",

@@ -1,11 +1,11 @@
-<h1 align="center">TS Rules Engine</h1>
+<h1 align="center">Rules Engine TS</h1>
 
 <div align="center">
 
-[![Status](https://img.shields.io/badge/status-active-blue)](https://github.com/andrewvo89/ts-rules-engine)
-[![GitHub Issues](https://img.shields.io/github/issues/andrewvo89/ts-rules-engine?color=blue)](https://github.com/andrewvo89/ts-rules-engine/issues)
-[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/andrewvo89/ts-rules-engine?color=blue)](https://github.com/andrewvo89/ts-rules-engine/pulls)
-[![License](https://img.shields.io/github/license/andrewvo89/ts-rules-engine?color=blue)](/LICENSE)
+[![Status](https://img.shields.io/badge/status-active-blue)](https://github.com/andrewvo89/rules-engine-ts)
+[![GitHub Issues](https://img.shields.io/github/issues/andrewvo89/rules-engine-ts?color=blue)](https://github.com/andrewvo89/rules-engine-ts/issues)
+[![GitHub Pull Requests](https://img.shields.io/github/issues-pr/andrewvo89/rules-engine-ts?color=blue)](https://github.com/andrewvo89/rules-engine-ts/pulls)
+[![License](https://img.shields.io/github/license/andrewvo89/rules-engine-ts?color=blue)](/LICENSE)
 
 </div>
 
@@ -23,7 +23,7 @@
 
 ## About
 
-TS Rules Engine is a strongly typed rules engine for evaluating deep and complex rules. With the power of Typescript you can create type safe rules that are easy to read and maintain.
+Rules Engine TS is a strongly typed rules engine for evaluating deep and complex rules. With the power of Typescript you can create type safe rules that are easy to read and maintain.
 
 ## Terminology
 
@@ -65,12 +65,12 @@ The parent of a rule or union is the union that contains it. Any rule or union c
 
 ## Basic Usage
 
-The recommended way to consume `ts-rules-engine` is in a TypeScript environment. TypeScript will warn you when your rules are missing properties or if the types of your properties are incorrect. That isn't to say that `ts-rules-engine` can't be run with JavaScript. You will still get autocomplete on the available properties, but you will not get any warnings if you are missing properties or if the types of your properties are incorrect.
+The recommended way to consume `rules-engine-ts` is in a TypeScript environment. TypeScript will warn you when your rules are missing properties or if the types of your properties are incorrect. That isn't to say that `rules-engine-ts` can't be run with JavaScript. You will still get autocomplete on the available properties, but you will not get any warnings if you are missing properties or if the types of your properties are incorrect.
 
 A rules engine can be configured and run like so:
 
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, run } from 'ts-rules-engine';
+import { addRuleToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
 
 // Create root union
 const root = createRoot('and');
@@ -146,9 +146,9 @@ If we console log the root we can see what our rules look like:
 Install the package using your favorite package manager:
 
 ```
-npm install ts-rules-engine
-yarn add ts-rules-engine
-pnpm add ts-rules-engine
+npm install rules-engine-ts
+yarn add rules-engine-ts
+pnpm add rules-engine-ts
 ```
 
 ## Usage
@@ -158,7 +158,7 @@ pnpm add ts-rules-engine
 Creates a root union. This is the entry point for creating a rules engine.
 
 ```js
-import { createRoot } from 'ts-rules-engine';
+import { createRoot } from 'rules-engine-ts';
 
 const root = createRoot('and');
 ```
@@ -183,7 +183,7 @@ Adds a rule to a union or root union. The rules engine assigns a unique ID and a
 Building on from the previous example:
 
 ```js
-import { addRuleToUnion, createRoot } from 'ts-rules-engine';
+import { addRuleToUnion, createRoot } from 'rules-engine-ts';
 
 const root = createRoot('and');
 
@@ -220,7 +220,7 @@ Adds a union to an existing union or root union. Returns the rule that was added
 Building on from the previous example:
 
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, run } from 'ts-rules-engine';
+import { addRuleToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
 
 const root = createRoot('and');
 addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
@@ -286,7 +286,7 @@ Evaluates a set of rules against a value. The value can be of any type (object, 
 Building on from the previous example:
 
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, run } from 'ts-rules-engine';
+import { addRuleToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
 
 const root = createRoot('and');
 addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
@@ -307,7 +307,7 @@ console.log(fail); // false
 Finds any rule or union by id. Returns the rule or union if found, otherwise returns undefined.
 
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, findAnyById } from 'ts-rules-engine';
+import { addRuleToUnion, addUnionToUnion, createRoot, findAnyById } from 'rules-engine-ts';
 
 const root = createRoot('and');
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
@@ -325,7 +325,7 @@ console.log(foundUnion === union); // true
 Finds a rule by id. Returns the rule if found, otherwise returns undefined.
 
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, findRuleById } from 'ts-rules-engine';
+import { addRuleToUnion, addUnionToUnion, createRoot, findRuleById } from 'rules-engine-ts';
 
 const root = createRoot('and');
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
@@ -343,7 +343,7 @@ console.log(foundUnion); // undefined
 Finds a union by id. Returns the union if found, otherwise returns undefined.
 
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, findUnionById } from 'ts-rules-engine';
+import { addRuleToUnion, addUnionToUnion, createRoot, findUnionById } from 'rules-engine-ts';
 
 const root = createRoot('and');
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
@@ -361,7 +361,7 @@ console.log(foundRule); // undefined;
 Validates the structure of a ruleset. Returns an object with a boolean indicating whether the ruleset is valid, and a reason if the ruleset is invalid.
 
 ```js
-import { addRuleToUnion, createRoot, validate } from 'ts-rules-engine';
+import { addRuleToUnion, createRoot, validate } from 'rules-engine-ts';
 
 const root = createRoot('and');
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
@@ -390,7 +390,7 @@ Normaliztion is a process that ensures that the ruleset is in a consistent state
 > Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
 
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, normalize } from 'ts-rules-engine';
+import { addRuleToUnion, addUnionToUnion, createRoot, normalize } from 'rules-engine-ts';
 
 import { randomUUID } from 'crypto';
 
@@ -466,7 +466,7 @@ Updates a rule by id. Returns the updated rule if found, otherwise returns undef
 > Note: This function mutates the input root union. Clone the union before passing it in if you want to maintain its original state.
 
 ```js
-import { addRuleToUnion, createRoot, updateRuleById } from 'ts-rules-engine';
+import { addRuleToUnion, createRoot, updateRuleById } from 'rules-engine-ts';
 
 const root = createRoot('and');
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
@@ -511,7 +511,7 @@ Updates a union by id. Returns the updated union if found, otherwise returns und
 > Note: This function mutates the input root union. Clone the union before passing it in if you want to maintain its original state.
 
 ```js
-import { addUnionToUnion, createRoot, updateUnionById } from 'ts-rules-engine';
+import { addUnionToUnion, createRoot, updateUnionById } from 'rules-engine-ts';
 
 const root = createRoot('and');
 const union = addUnionToUnion(root, { connector: 'and' });
@@ -552,7 +552,7 @@ Removes all rules and unions of a given id from a ruleset. Returns the updated r
 > Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
 
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, removeAllById } from 'ts-rules-engine';
+import { addRuleToUnion, addUnionToUnion, createRoot, removeAllById } from 'rules-engine-ts';
 
 const root = createRoot('and');
 const union = addUnionToUnion(root, { connector: 'or' });
@@ -661,7 +661,7 @@ The properties of a rule change depending on the `type` field. The `type` field 
 Rules can be pre-composed using type anotations before adding it to the rules engine:
 
 ```ts
-import { NewNumberRule, NewRule, addRuleToUnion, createRoot } from 'ts-rules-engine';
+import { NewNumberRule, NewRule, addRuleToUnion, createRoot } from 'rules-engine-ts';
 
 const root = createRoot('and');
 
@@ -702,7 +702,7 @@ console.log(narrowAfterAdding);
 Similarly, a union can also be pre-composed before adding it to the rules engine:
 
 ```ts
-import { NewUnion, addUnionToUnion, createRoot } from 'ts-rules-engine';
+import { NewUnion, addUnionToUnion, createRoot } from 'rules-engine-ts';
 
 const userSelectsAnd = false;
 
@@ -733,4 +733,4 @@ console.log(unionAfterAdding);
 
 - [@andrewvo89](https://github.com/andrewvo89) - Idea & Initial work.
 
-See also the list of [contributors](https://github.com/andrewvo89/ts-rules-engine/contributors) who participated in this project.
+See also the list of [contributors](https://github.com/andrewvo89/rules-engine-ts/contributors) who participated in this project.
