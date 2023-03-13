@@ -21,7 +21,6 @@ test('find root union', () => {
 
 test('find deeply nested rule', () => {
   const result = findRuleById(root, rule.id);
-  console.log('root', root);
   expect(result).toBe(rule);
 });
 

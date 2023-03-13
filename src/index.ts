@@ -4,6 +4,7 @@ export * from './functions/create-root';
 export * from './functions/find-any-by-id';
 export * from './functions/find-rule-by-id';
 export * from './functions/find-union-by-id';
+export * from './functions/normalize';
 export * from './functions/remove-all-by-id';
 export * from './functions/run';
 export * from './functions/update-rule-by-id';
