@@ -8,12 +8,12 @@ import { ruleSchema } from '../validations/rule';
  * Add a rule to a union.
  * This function will mutate the union.
  * @export
- * @param {(RootUnion | Union)} union
+ * @param {(RootUnion | Union)} parent
  * @param {NewRule} newRule
  * @return {*}  {Rule}
  */
-export function addRuleToUnion(union: RootUnion | Union, newRule: NewRule): Rule {
-  const rule = ruleSchema.parse({ ...newRule, id: randomUUID(), parent_id: union.id, entity: 'rule' });
-  union.rules.push(rule);
+export function addRuleToUnion(parent: RootUnion | Union, newRule: NewRule): Rule {
+  const rule = ruleSchema.parse({ ...newRule, id: randomUUID(), parent_id: parent.id, entity: 'rule' });
+  parent.rules.push(rule);
   return rule;
 }
