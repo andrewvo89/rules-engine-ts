@@ -53,20 +53,64 @@ test('normalization removes an union with no rules', () => {
   expect(root.rules).toHaveLength(0);
 });
 
-test('normalization finds nothing wrong', () => {
+test('normalization promotes union with 1 rule to parent level', () => {
   const root = createRoot('or');
+  addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 
   const union = addUnionToUnion(root, { connector: 'and' });
-  addRuleToUnion(union, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
-  addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'alice' });
+  const rule = addRuleToUnion(union, { field: 'name', operator: 'contains', type: 'string', value: 'alice' });
+
+  expect(root.rules[1].entity).toBe('union');
+  expect(root.rules[1].id).toBe(union.id);
+
+  normalize(root);
+
+  expect(root.rules[1].entity).toBe('rule');
+  expect(root.rules[1].id).toBe(rule.id);
+});
+
+test('normalization finds nothing wrong', () => {
+  const root = createRoot('or');
+  addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
+
+  const union = addUnionToUnion(root, { connector: 'and' });
+  addRuleToUnion(union, { field: 'name', operator: 'contains', type: 'string', value: 'alice' });
+  addRuleToUnion(union, { field: 'age', operator: 'greater_than', type: 'number', value: 18 });
 
   expect(root.rules).toHaveLength(2);
   root.rules.forEach((rule) => {
     expect(rule.parent_id).toBe(root.id);
   });
+
   normalize(root);
+
   expect(root.rules).toHaveLength(2);
   root.rules.forEach((rule) => {
     expect(rule.parent_id).toBe(root.id);
   });
+});
+
+test('normalization has all options turn off', () => {
+  const root = createRoot('or');
+  addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
+
+  const union = addUnionToUnion(root, { connector: 'and' });
+  const rule = addRuleToUnion(union, { field: 'name', operator: 'contains', type: 'string', value: 'alice' });
+  addRuleToUnion(union, { field: 'age', operator: 'greater_than', type: 'number', value: 18 });
+
+  expect(union.parent_id).toBe(root.id);
+  expect(rule.parent_id).toBe(union.id);
+
+  union.parent_id = uuidv4();
+  rule.parent_id = uuidv4();
+
+  normalize(root, {
+    update_parent_ids: false,
+    promote_single_rule_unions: false,
+    remove_empty_unions: false,
+    remove_failed_validations: false,
+  });
+
+  expect(union.parent_id).not.toBe(root.id);
+  expect(rule.parent_id).not.toBe(union.id);
 });

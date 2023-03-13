@@ -384,14 +384,16 @@ console.log(validate(root));
 // }
 ```
 
-### `normalize<T extends Union | RootUnion>(union: T): T`
+### `normalize<T extends Union | RootUnion>(union: T, options?: Options): T`
 
-Normaliztion is a process that ensures that the ruleset is in a consistent state. It performs the following mutations recursively:
+Normalization is a process that ensures that the ruleset is in a consistent state. It performs the following updates recursively in the following order:
 
-- Removes any unions without any rules
-- Removes any unions that do not conform to the type system
-- Removes any rules that do not conform to the type system
-- Updates all parent ids to match the parent union
+- Removes any rules or unions that do not conform to the type system. `options.remove_failed_validations`
+- Removes any unions without any rules. `options.remove_empty_unions`
+- Converts any union with a single rule to a rule. `options.promote_single_rule_unions`
+- Updates all parent ids to match the parent union `options.update_parent_ids`
+
+All these updates are turned on by default. You can disable them by passing in an options object as the second argument with the corresponding properties set to false.
 
 > Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
 
@@ -404,16 +406,22 @@ const root = createRoot('or');
 
 const rule1 = addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 const union = addUnionToUnion(root, { connector: 'and' });
-const rule2 = addRuleToUnion(union, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
+const rule2 = addRuleToUnion(union, { field: 'name', operator: 'contains', type: 'string', value: 'alice' });
 
 rule1.parent_id = uuidv4();
 rule2.type = 'number';
 // @ts-expect-error
 union.connector = 'invalid';
 
-console.log(root.rules); // Before normalization
-normalize(root);
-console.log(root.rules); // After normalization
+console.log(root); // Before normalization
+normalize(root, {
+  // Normalization options (optional)
+  promote_single_rule_unions: true,
+  remove_empty_unions: true,
+  remove_failed_validations: true,
+  update_parent_ids: true,
+});
+console.log(root); // After normalization
 ```
 
 Before normalization:
@@ -421,13 +429,13 @@ Before normalization:
 ```js
 {
   entity: 'root_union',
-  id: 'c0128ca6-670e-4944-a4cf-b5486d4bc9b4',
+  id: '70cf2539-b960-4831-b0f2-3b201aea550a',
   connector: 'or',
   rules: [
     {
       entity: 'rule',
-      id: '489d314c-b355-4b49-8a89-09506c369b63',
-      parent_id: '742a9b09-bc5c-4be8-a58c-e44a7bdcd71b',
+      id: '4b644371-6bc2-46b1-b855-c2098df80fb3',
+      parent_id: '8ca677c2-b01c-4cf2-91ec-9c95b6ff7dff',
       type: 'string',
       field: 'name',
       operator: 'contains',
@@ -435,18 +443,18 @@ Before normalization:
     },
     {
       entity: 'union',
-      id: '4915eb2a-ca7d-4133-b397-ec81777f4bab',
-      parent_id: 'c0128ca6-670e-4944-a4cf-b5486d4bc9b4',
+      id: 'c43e8705-6b4b-42b5-941c-3295c17cf5db',
+      parent_id: '70cf2539-b960-4831-b0f2-3b201aea550a',
       connector: 'invalid',
       rules: [
         {
           entity: 'rule',
-          id: '41b165b4-55ed-4e01-8b36-151de1233018',
-          parent_id: '4915eb2a-ca7d-4133-b397-ec81777f4bab',
+          id: '8589e28c-a1d5-4a0b-b930-24c5931eaadb',
+          parent_id: 'c43e8705-6b4b-42b5-941c-3295c17cf5db',
           type: 'number',
           field: 'name',
           operator: 'contains',
-          value: 'bob'
+          value: 'alice'
         }
       ]
     }
@@ -459,13 +467,13 @@ After normalization:
 ```js
 {
   entity: 'root_union',
-  id: 'c0128ca6-670e-4944-a4cf-b5486d4bc9b4',
+  id: '70cf2539-b960-4831-b0f2-3b201aea550a',
   connector: 'or',
   rules: [
     {
       entity: 'rule',
-      id: '489d314c-b355-4b49-8a89-09506c369b63',
-      parent_id: 'c0128ca6-670e-4944-a4cf-b5486d4bc9b4',
+      id: '4b644371-6bc2-46b1-b855-c2098df80fb3',
+      parent_id: '70cf2539-b960-4831-b0f2-3b201aea550a',
       type: 'string',
       field: 'name',
       operator: 'contains',
