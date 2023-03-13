@@ -16,10 +16,13 @@
 ## Table of Contents
 
 - [About](#about)
+- [Terminology](#terminology)
+- [Basic Usage](#basic-usage)
 - [Installation](#installation)
 - [Usage](#usage)
+- [Rules Specification](#rule-specification)
+- [TypeScript Usage](#typescript-usage)
 - [Authors](#authors)
-- [Acknowledgments](#acknowledgements)
 
 ## About
 
@@ -50,6 +53,8 @@ Depending on the `type`, certain operators are available. For example, the `stri
 - not_contains
 - starts_with
 - ends_with
+
+Refer to the [Rules Specification](#rules-specification) section for more information on the available properties.
 
 ### Union
 
@@ -410,53 +415,63 @@ normalize(root);
 console.log(root.rules); // After normalization
 ```
 
-Before normalization
+Before normalization:
 
 ```js
-[
-  {
-    entity: 'rule',
-    id: 'c363faa4-e987-4748-b68e-20b6048a51a1',
-    parent_id: '0835cc47-5d59-419a-ab1d-7d65139956ab',
-    type: 'string',
-    field: 'name',
-    operator: 'contains',
-    value: 'bob',
-  },
-  {
-    entity: 'union',
-    id: '98d84349-6718-47d7-9059-4e4d517f397e',
-    parent_id: '28d2de5d-fb05-482e-9d63-b029ea75cc9c',
-    connector: 'invalid',
-    rules: [
-      {
-        entity: 'rule',
-        id: '983c6aad-643f-40e2-afa2-aea401327859',
-        parent_id: '98d84349-6718-47d7-9059-4e4d517f397e',
-        type: 'number',
-        field: 'name',
-        operator: 'contains',
-        value: 'bob',
-      },
-    ],
-  },
-];
+{
+  entity: 'root_union',
+  id: 'c0128ca6-670e-4944-a4cf-b5486d4bc9b4',
+  connector: 'or',
+  rules: [
+    {
+      entity: 'rule',
+      id: '489d314c-b355-4b49-8a89-09506c369b63',
+      parent_id: '742a9b09-bc5c-4be8-a58c-e44a7bdcd71b',
+      type: 'string',
+      field: 'name',
+      operator: 'contains',
+      value: 'bob'
+    },
+    {
+      entity: 'union',
+      id: '4915eb2a-ca7d-4133-b397-ec81777f4bab',
+      parent_id: 'c0128ca6-670e-4944-a4cf-b5486d4bc9b4',
+      connector: 'invalid',
+      rules: [
+        {
+          entity: 'rule',
+          id: '41b165b4-55ed-4e01-8b36-151de1233018',
+          parent_id: '4915eb2a-ca7d-4133-b397-ec81777f4bab',
+          type: 'number',
+          field: 'name',
+          operator: 'contains',
+          value: 'bob'
+        }
+      ]
+    }
+  ]
+}
 ```
 
-After normalization
+After normalization:
 
 ```js
-[
-  {
-    entity: 'rule',
-    id: 'c363faa4-e987-4748-b68e-20b6048a51a1',
-    parent_id: '28d2de5d-fb05-482e-9d63-b029ea75cc9c',
-    type: 'string',
-    field: 'name',
-    operator: 'contains',
-    value: 'bob',
-  },
-];
+{
+  entity: 'root_union',
+  id: 'c0128ca6-670e-4944-a4cf-b5486d4bc9b4',
+  connector: 'or',
+  rules: [
+    {
+      entity: 'rule',
+      id: '489d314c-b355-4b49-8a89-09506c369b63',
+      parent_id: 'c0128ca6-670e-4944-a4cf-b5486d4bc9b4',
+      type: 'string',
+      field: 'name',
+      operator: 'contains',
+      value: 'bob'
+    }
+  ]
+}
 ```
 
 ### `updateRuleById(root: RootUnion, id: string, values: NewRule): Rule | undefined`
@@ -476,7 +491,7 @@ updateRuleById(root, rule.id, { type: 'number', field: 'age', operator: 'less_th
 console.log(root.rules[0]); // After update
 ```
 
-Before update
+Before update:
 
 ```js
 {
@@ -490,7 +505,7 @@ Before update
 }
 ```
 
-After update
+After update:
 
 ```js
 {
@@ -521,7 +536,7 @@ updateUnionById(root, union.id, { connector: 'or' });
 console.log(root.rules[0]); // After update
 ```
 
-Before update
+Before update:
 
 ```js
 {
@@ -533,7 +548,7 @@ Before update
 }
 ```
 
-After update
+After update:
 
 ```js
 {
@@ -563,7 +578,7 @@ removeAllById(root, rule.id);
 console.log(union.rules.length); // 0
 ```
 
-## Rule Specification
+## Rules Specification
 
 The properties of a rule change depending on the `type` field. The `type` field acts as a discriminator to determine which properties are valid for a given rule.
 

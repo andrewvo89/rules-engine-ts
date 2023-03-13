@@ -3,6 +3,7 @@
   "version": "1.0.3",
   "repository": "https://github.com/andrewvo89/rules-engine-ts.git",
   "author": "Andrew Vo-Nguyen <hello@andrewvo.co> (https://andrewvo.co)",
+  "description": "Strongly typed rules engine for evaluating deep and complex rules",
   "scripts": {
     "build": "eslint && rm -r -f lib && tsc -p tsconfig.json",
     "commit": "cz",
