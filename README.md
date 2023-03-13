@@ -723,6 +723,12 @@ console.log(unionAfterAdding);
 };
 ```
 
+## To Do
+
+- [ ] Create function to detect conflicting or redundant rules
+
+- [ ] Create a UI builder tool
+
 ## Authors
 
 - [@andrewvo89](https://github.com/andrewvo89) - Idea & Initial work.
