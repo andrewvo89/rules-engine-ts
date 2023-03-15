@@ -16,3 +16,7 @@ export const rootUnionSchema = z.object({
   connector: z.union([z.literal('and'), z.literal('or')]),
   rules: z.array(ruleSchema.or(unionSchema)),
 });
+
+export const newUnionSchema = rootUnionSchema.pick({
+  connector: true,
+});

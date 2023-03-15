@@ -6,7 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 
 /**
  * Add a rule to a union.
- * This function will mutate the union.
+ * This function will mutate the parent union.
  * @export
  * @param {(RootUnion | Union)} parent
  * @param {NewRule} newRule

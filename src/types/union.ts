@@ -1,5 +1,6 @@
+import { newUnionSchema, rootUnionSchema } from '../validations/union';
+
 import { Rule } from './rule';
-import { rootUnionSchema } from '../validations/union';
 import { z } from 'zod';
 
 export type Union = {
@@ -12,4 +13,4 @@ export type Union = {
 
 export type RootUnion = z.infer<typeof rootUnionSchema>;
 
-export type NewUnion = Omit<Union, 'id' | 'parent_id' | 'entity' | 'rules'>;
+export type NewUnion = z.infer<typeof newUnionSchema>;
