@@ -4,7 +4,7 @@ import { addAnyToUnion } from './add-any-to-union';
 import { createRoot } from './create-root';
 
 test('union is added to a union', () => {
-  const root = createRoot('and');
+  const root = createRoot({ connector: 'and' });
   const newUnion: NewUnion = {
     connector: 'and',
   };
@@ -15,7 +15,7 @@ test('union is added to a union', () => {
 });
 
 test('rule is added to a union', () => {
-  const root = createRoot('and');
+  const root = createRoot({ connector: 'and' });
   const newRule: NewRule = {
     field: 'name',
     operator: 'contains',

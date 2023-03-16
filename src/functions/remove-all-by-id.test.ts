@@ -5,7 +5,7 @@ import { removeAllById } from './remove-all-by-id';
 import { v4 as uuidv4 } from 'uuid';
 
 test('remove many deeply nested union', () => {
-  const root = createRoot('and');
+  const root = createRoot({ connector: 'and' });
   const union = addUnionToUnion(root, { connector: 'and' });
   const deepUnion = addUnionToUnion(union, { connector: 'and' });
   addRuleToUnion(deepUnion, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
@@ -25,7 +25,7 @@ test('remove many deeply nested union', () => {
 });
 
 test('remove non existent id', () => {
-  const root = createRoot('and');
+  const root = createRoot({ connector: 'and' });
   const union = addUnionToUnion(root, { connector: 'and' });
 
   expect(root.rules).toContain(union);

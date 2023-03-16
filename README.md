@@ -78,7 +78,7 @@ A rules engine can be configured and run like so:
 import { addRuleToUnion, addRulesToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
 
 // Create root union
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 
 // Add a rule to the root union
 addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
@@ -168,7 +168,7 @@ Creates a root union. This is the entry point for creating a rules engine.
 ```js
 import { createRoot } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 ```
 
 State of the Rules Engine:
@@ -191,7 +191,7 @@ Adds a rule to a union or root union. The rules engine assigns a unique ID and a
 ```js
 import { addRuleToUnion, createRoot } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 
 addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 ```
@@ -226,7 +226,7 @@ Adds many rules to a union or root union. The rules engine assigns a unique ID a
 ```js
 import { addRulesToUnion, createRoot } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 
 addRulesToUnion(root, [
   { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true },
@@ -275,7 +275,7 @@ Adds a union to an existing union or root union. Returns the rule that was added
 ```js
 import { addRuleToUnion, addRulesToUnion, addUnionToUnion, createRoot } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 
 const union = addUnionToUnion(root, { connector: 'or' });
 addRuleToUnion(union, { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true });
@@ -331,7 +331,7 @@ Adds many unions to an existing union or root union. Returns the list of unions 
 ```js
 import { addRulesToUnion, addUnionsToUnion, createRoot } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 
 const unions = addUnionsToUnion(root, [{ connector: 'or' }, { connector: 'or' }]);
 addRulesToUnion(unions[0], [
@@ -419,7 +419,7 @@ Adds a rule or a union to an existing union or root union. Returns the rule or u
 ```js
 import { addAnyToUnion, createRoot } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 
 const any = addAnyToUnion(root, { connector: 'or' });
 if (any.entity === 'union') {
@@ -477,7 +477,7 @@ Adds many rules or unions to an existing union or root union. Returns the list o
 ```js
 import { addManyToUnion, createRoot } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 
 addManyToUnion(root, [
   { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true },
@@ -532,7 +532,7 @@ Evaluates a set of rules against a value. The value can be of any type (object, 
 ```js
 import { addRuleToUnion, addRulesToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 
 const union = addUnionToUnion(root, { connector: 'or' });
@@ -555,7 +555,7 @@ Finds any rule or union by id. Returns the rule or union if found, otherwise ret
 ```js
 import { addRuleToUnion, addUnionToUnion, createRoot, findAnyById } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 const union = addUnionToUnion(root, { connector: 'or' });
 
@@ -573,7 +573,7 @@ Finds a rule by id. Returns the rule if found, otherwise returns undefined.
 ```js
 import { addRuleToUnion, addUnionToUnion, createRoot, findRuleById } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 const union = addUnionToUnion(root, { connector: 'or' });
 
@@ -591,7 +591,7 @@ Finds a union by id. Returns the union if found, otherwise returns undefined.
 ```js
 import { addRuleToUnion, addUnionToUnion, createRoot, findUnionById } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 const union = addUnionToUnion(root, { connector: 'or' });
 
@@ -609,7 +609,7 @@ Validates the structure of a ruleset. Returns an object with a boolean indicatin
 ```js
 import { addRuleToUnion, createRoot, validate } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 
 console.log(validate(root));
@@ -642,7 +642,7 @@ import { addRuleToUnion, addUnionToUnion, createRoot, normalize } from 'rules-en
 
 import { v4 as uuidv4 } from 'uuid';
 
-const root = createRoot('or');
+const root = createRoot({ connector: 'or' });
 
 const rule1 = addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 const union = addUnionToUnion(root, { connector: 'and' });
@@ -732,7 +732,7 @@ Updates a rule by id. Returns the updated rule if found, otherwise returns undef
 ```js
 import { addRuleToUnion, createRoot, updateRuleById } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 const rule = addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 
 console.log(root.rules[0]); // Before update
@@ -777,7 +777,7 @@ Updates a union by id. Returns the updated union if found, otherwise returns und
 ```js
 import { addUnionToUnion, createRoot, updateUnionById } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 const union = addUnionToUnion(root, { connector: 'and' });
 
 console.log(root.rules[0]); // Before update
@@ -818,7 +818,7 @@ Removes all rules and unions of a given id from a ruleset. Returns the updated r
 ```js
 import { addRuleToUnion, addUnionToUnion, createRoot, removeAllById } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 const union = addUnionToUnion(root, { connector: 'or' });
 const rule = addRuleToUnion(union, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 
@@ -927,7 +927,7 @@ Rules can be pre-composed using type anotations before adding it to the rules en
 ```ts
 import { NewNumberRule, NewRule, addRuleToUnion, createRoot } from 'rules-engine-ts';
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 
 const wideTypingRule: NewRule = { type: 'number', field: 'age', operator: 'greater_than', value: 18 };
 const narrowTypingRule: NewNumberRule = { type: 'number', field: 'age', operator: 'less_than', value: 30 };
@@ -970,7 +970,7 @@ import { NewUnion, addUnionToUnion, createRoot } from 'rules-engine-ts';
 
 const userSelectsAnd = false;
 
-const root = createRoot('and');
+const root = createRoot({ connector: 'and' });
 const union: NewUnion = { connector: userSelectsAnd ? 'and' : 'or' };
 
 const unionAfterAdding = addUnionToUnion(root, union);

@@ -3,7 +3,7 @@ import { addRulesToUnion } from './add-rules-to-union';
 import { createRoot } from './create-root';
 
 test('rules are added to a union', () => {
-  const root = createRoot('and');
+  const root = createRoot({ connector: 'and' });
   const newRuleA: NewRule = {
     field: 'name',
     operator: 'contains',

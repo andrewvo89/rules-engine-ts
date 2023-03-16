@@ -4,7 +4,7 @@ import { createRoot } from './create-root';
 import { findRuleById } from './find-rule-by-id';
 import { v4 as uuidv4 } from 'uuid';
 
-const root = createRoot('or');
+const root = createRoot({ connector: 'or' });
 
 addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'alice' });

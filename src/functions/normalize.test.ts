@@ -5,7 +5,7 @@ import { normalize } from './normalize';
 import { v4 as uuidv4 } from 'uuid';
 
 test('normalization removes an invalid rule', () => {
-  const root = createRoot('or');
+  const root = createRoot({ connector: 'or' });
 
   const rule = addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
   rule.type = 'number';
@@ -16,7 +16,7 @@ test('normalization removes an invalid rule', () => {
 });
 
 test('normalization fixes the parent id of a rule', () => {
-  const root = createRoot('or');
+  const root = createRoot({ connector: 'or' });
 
   const rule = addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
   rule.parent_id = uuidv4();
@@ -32,7 +32,7 @@ test('normalization fixes the parent id of a rule', () => {
 });
 
 test('normalization removes an invalid union', () => {
-  const root = createRoot('or');
+  const root = createRoot({ connector: 'or' });
 
   const union = addUnionToUnion(root, { connector: 'and' });
   addRuleToUnion(union, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
@@ -45,7 +45,7 @@ test('normalization removes an invalid union', () => {
 });
 
 test('normalization removes an union with no rules', () => {
-  const root = createRoot('or');
+  const root = createRoot({ connector: 'or' });
   addUnionToUnion(root, { connector: 'and' });
 
   expect(root.rules).toHaveLength(1);
@@ -54,7 +54,7 @@ test('normalization removes an union with no rules', () => {
 });
 
 test('normalization promotes union with 1 rule to parent level', () => {
-  const root = createRoot('or');
+  const root = createRoot({ connector: 'or' });
   addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 
   const union = addUnionToUnion(root, { connector: 'and' });
@@ -70,7 +70,7 @@ test('normalization promotes union with 1 rule to parent level', () => {
 });
 
 test('normalization finds nothing wrong', () => {
-  const root = createRoot('or');
+  const root = createRoot({ connector: 'or' });
   addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 
   const union = addUnionToUnion(root, { connector: 'and' });
@@ -91,7 +91,7 @@ test('normalization finds nothing wrong', () => {
 });
 
 test('normalization has all options turn off', () => {
-  const root = createRoot('or');
+  const root = createRoot({ connector: 'or' });
   addRuleToUnion(root, { field: 'name', operator: 'contains', type: 'string', value: 'bob' });
 
   const union = addUnionToUnion(root, { connector: 'and' });

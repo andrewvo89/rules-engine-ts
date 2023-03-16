@@ -4,7 +4,7 @@ import { addManyToUnion } from './add-many-to-union';
 import { createRoot } from './create-root';
 
 test('rule and a union is added to a union', () => {
-  const root = createRoot('and');
+  const root = createRoot({ connector: 'and' });
   const newUnion: NewUnion = {
     connector: 'and',
   };

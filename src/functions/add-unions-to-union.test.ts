@@ -3,7 +3,7 @@ import { addUnionsToUnion } from './add-unions-to-union';
 import { createRoot } from './create-root';
 
 test('unions are added to a union', () => {
-  const root = createRoot('and');
+  const root = createRoot({ connector: 'and' });
   const newUnionA: NewUnion = {
     connector: 'and',
   };
