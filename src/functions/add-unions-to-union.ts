@@ -3,7 +3,7 @@ import { NewUnion, RootUnion, Union } from '../types/union';
 import { addUnionToUnion } from './add-union-to-union';
 
 /**
- * Adds many unions to a union.
+ * Add many unions to a union.
  * This function will mutate the parent union.
  * @export
  * @param {(RootUnion | Union)} parent

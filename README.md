@@ -75,7 +75,7 @@ The recommended way to consume `rules-engine-ts` is in a TypeScript environment.
 A rules engine can be configured and run like so:
 
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
+import { addRuleToUnion, addRulesToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
 
 // Create root union
 const root = createRoot('and');
@@ -87,8 +87,10 @@ addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', v
 const union = addUnionToUnion(root, { connector: 'or' });
 
 // Add nested rules to the nested union
-addRuleToUnion(union, { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true });
-addRuleToUnion(union, { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true });
+addRulesToUnion(union, [
+  { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true },
+  { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true },
+]);
 
 // Run the rules engine
 const pass = run(root, { age: 19, name: 'Bob' });
@@ -169,7 +171,7 @@ import { createRoot } from 'rules-engine-ts';
 const root = createRoot('and');
 ```
 
-Current state of the Rules Engine:
+State of the Rules Engine:
 
 ```js
 {
@@ -186,8 +188,6 @@ Adds a rule to a union or root union. The rules engine assigns a unique ID and a
 
 > Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
 
-Building on from the previous example:
-
 ```js
 import { addRuleToUnion, createRoot } from 'rules-engine-ts';
 
@@ -196,7 +196,7 @@ const root = createRoot('and');
 addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 ```
 
-Current state of the Rules Engine:
+State of the Rules Engine:
 
 ```js
 {
@@ -217,26 +217,72 @@ Current state of the Rules Engine:
 }
 ```
 
+### `addRulesToUnion(parent: RootUnion | Union, newRules: NewRule[]): Rule[]`
+
+Adds many rules to a union or root union. The rules engine assigns a unique ID and automatically tags it with a `parent_id`. Returns the list of rules that were added.
+
+> Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
+
+```js
+import { addRulesToUnion, createRoot } from 'rules-engine-ts';
+
+const root = createRoot('and');
+
+addRulesToUnion(root, [
+  { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true },
+  { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true },
+]);
+```
+
+State of the Rules Engine:
+
+```js
+{
+  entity: 'root_union',
+  id: '61dadd25-22a0-4e84-abe5-92fcfd6cac9e',
+  connector: 'and',
+  rules: [
+    {
+      entity: 'rule',
+      id: '50158f7e-1d87-4ca8-aaca-ef1bbb41c9c2',
+      parent_id: '61dadd25-22a0-4e84-abe5-92fcfd6cac9e',
+      type: 'string',
+      field: 'name',
+      operator: 'equals_to',
+      value: 'bob',
+      ignore_case: true
+    },
+    {
+      entity: 'rule',
+      id: '5f6ac1d1-7ce7-40a5-a94c-5e4a47a45e28',
+      parent_id: '61dadd25-22a0-4e84-abe5-92fcfd6cac9e',
+      type: 'string',
+      field: 'name',
+      operator: 'equals_to',
+      value: 'alice',
+      ignore_case: true
+    }
+  ]
+}
+```
+
 ### `addUnionToUnion(parent: RootUnion | Union, newUnion: NewUnion): Union`
 
 Adds a union to an existing union or root union. Returns the rule that was added.
 
 > Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
 
-Building on from the previous example:
-
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
+import { addRuleToUnion, addRulesToUnion, addUnionToUnion, createRoot } from 'rules-engine-ts';
 
 const root = createRoot('and');
-addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 
 const union = addUnionToUnion(root, { connector: 'or' });
 addRuleToUnion(union, { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true });
 addRuleToUnion(union, { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true });
 ```
 
-Current state of the Rules Engine:
+State of the Rules Engine:
 
 ```js
 {
@@ -244,15 +290,6 @@ Current state of the Rules Engine:
   id: "0d7428af-10e4-481b-84a7-056946bd4f12",
   connector: "and",
   rules: [
-    {
-      entity: "rule",
-      id: "82e96b0d-886e-4a2e-bf8c-f81b02ef11ce",
-      parent_id: "0d7428af-10e4-481b-84a7-056946bd4f12",
-      type: "number",
-      field: "age",
-      operator: "greater_than",
-      value: 18,
-    },
     {
       entity: "union",
       id: "7c493486-409b-48df-bd66-7f4a16500c5e",
@@ -285,21 +322,224 @@ Current state of the Rules Engine:
 }
 ```
 
+### `addUnionsToUnion(parent: RootUnion | Union, newUnions: NewUnion[]): Union[]`
+
+Adds many unions to an existing union or root union. Returns the list of unions that were added.
+
+> Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
+
+```js
+import { addRulesToUnion, addUnionsToUnion, createRoot } from 'rules-engine-ts';
+
+const root = createRoot('and');
+
+const unions = addUnionsToUnion(root, [{ connector: 'or' }, { connector: 'or' }]);
+addRulesToUnion(unions[0], [
+  { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true },
+  { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true },
+]);
+addRulesToUnion(unions[1], [
+  { type: 'number', field: 'age', value: 18, operator: 'equals_to' },
+  { type: 'number', field: 'age', value: 21, operator: 'equals_to' },
+]);
+```
+
+State of the Rules Engine:
+
+```js
+{
+  entity: 'root_union',
+  id: '28a9ae06-594a-4520-8d73-2fd871804634',
+  connector: 'and',
+  rules: [
+    {
+      entity: 'union',
+      id: '8e5e66dd-e86c-4f9e-acc7-7baa852fdfe8',
+      parent_id: '28a9ae06-594a-4520-8d73-2fd871804634',
+      connector: 'or',
+      rules: [
+        {
+          entity: 'rule',
+          id: 'a8ecbafd-0a1a-4e9e-bb70-8bd11a62f274',
+          parent_id: '8e5e66dd-e86c-4f9e-acc7-7baa852fdfe8',
+          type: 'string',
+          field: 'name',
+          operator: 'equals_to',
+          value: 'bob',
+          ignore_case: true
+        },
+        {
+          entity: 'rule',
+          id: 'd4fd56bf-af82-4382-a1cb-93d80cb87ef4',
+          parent_id: '8e5e66dd-e86c-4f9e-acc7-7baa852fdfe8',
+          type: 'string',
+          field: 'name',
+          operator: 'equals_to',
+          value: 'alice',
+          ignore_case: true
+        }
+      ]
+    },
+    {
+      entity: 'union',
+      id: '5e5d7f00-d0f6-40d9-84b3-39600241a92f',
+      parent_id: '28a9ae06-594a-4520-8d73-2fd871804634',
+      connector: 'or',
+      rules: [
+        {
+          entity: 'rule',
+          id: '7ea03690-d9c4-4a3e-97eb-d927cf6845e8',
+          parent_id: '5e5d7f00-d0f6-40d9-84b3-39600241a92f',
+          type: 'number',
+          field: 'age',
+          operator: 'equals_to',
+          value: 18
+        },
+        {
+          entity: 'rule',
+          id: 'bb63d7da-b0dc-4d00-824c-4de09151c609',
+          parent_id: '5e5d7f00-d0f6-40d9-84b3-39600241a92f',
+          type: 'number',
+          field: 'age',
+          operator: 'equals_to',
+          value: 21
+        }
+      ]
+    }
+  ]
+}
+```
+
+### `addAnyToUnion(parent: RootUnion | Union, newRuleOrUnion: NewRule | NewUnion): Rule | Union`
+
+Adds a rule or a union to an existing union or root union. Returns the rule or union that was added.
+
+> Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
+
+```js
+import { addAnyToUnion, createRoot } from 'rules-engine-ts';
+
+const root = createRoot('and');
+
+const any = addAnyToUnion(root, { connector: 'or' });
+if (any.entity === 'union') {
+  addAnyToUnion(any, { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true });
+  addAnyToUnion(any, { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true });
+}
+```
+
+State of the Rules Engine:
+
+```js
+{
+  entity: 'root_union',
+  id: '825ef3d8-3151-4367-b751-1deae8b308c1',
+  connector: 'and',
+  rules: [
+    {
+      entity: 'union',
+      id: '71b5296a-5358-4399-878d-f535c9f21faf',
+      parent_id: '825ef3d8-3151-4367-b751-1deae8b308c1',
+      connector: 'or',
+      rules: [
+        {
+          entity: 'rule',
+          id: '3cd0463f-c5e7-4dd9-98b8-9e7cf79417b5',
+          parent_id: '71b5296a-5358-4399-878d-f535c9f21faf',
+          type: 'string',
+          field: 'name',
+          operator: 'equals_to',
+          value: 'bob',
+          ignore_case: true
+        },
+        {
+          entity: 'rule',
+          id: 'f10e7cec-c737-4c2c-b137-d7ab0e26e045',
+          parent_id: '71b5296a-5358-4399-878d-f535c9f21faf',
+          type: 'string',
+          field: 'name',
+          operator: 'equals_to',
+          value: 'alice',
+          ignore_case: true
+        }
+      ]
+    }
+  ]
+}
+```
+
+### `addManyToUnion(parent: RootUnion | Union, newRulesOrUnions: (NewRule | NewUnion)[]): (Rule | Union)[]`
+
+Adds many rules or unions to an existing union or root union. Returns the list of rules or unions that were added.
+
+> Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
+
+```js
+import { addManyToUnion, createRoot } from 'rules-engine-ts';
+
+const root = createRoot('and');
+
+addManyToUnion(root, [
+  { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true },
+  { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true },
+  { connector: 'or' },
+]);
+```
+
+State of the Rules Engine:
+
+```js
+{
+  entity: 'root_union',
+  id: '26252c95-37da-47d4-b361-7ad82ae13a9b',
+  connector: 'and',
+  rules: [
+    {
+      entity: 'rule',
+      id: 'edbf5239-e931-480a-b231-119af2c1a1d1',
+      parent_id: '26252c95-37da-47d4-b361-7ad82ae13a9b',
+      type: 'string',
+      field: 'name',
+      operator: 'equals_to',
+      value: 'bob',
+      ignore_case: true
+    },
+    {
+      entity: 'rule',
+      id: '1e9109fa-30cf-41a9-9e78-e8395a423d6d',
+      parent_id: '26252c95-37da-47d4-b361-7ad82ae13a9b',
+      type: 'string',
+      field: 'name',
+      operator: 'equals_to',
+      value: 'alice',
+      ignore_case: true
+    },
+    {
+      entity: 'union',
+      id: '0bb57d03-ac07-41af-941a-6a2625bac130',
+      parent_id: '26252c95-37da-47d4-b361-7ad82ae13a9b',
+      connector: 'or',
+      rules: []
+    }
+  ]
+}
+```
+
 ### `run(union: RootUnion | Union, value: any): boolean`
 
 Evaluates a set of rules against a value. The value can be of any type (object, array, string, number, boolean, etc). Returns a boolean indicating whether the value passes the rules.
 
-Building on from the previous example:
-
 ```js
-import { addRuleToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
+import { addRuleToUnion, addRulesToUnion, addUnionToUnion, createRoot, run } from 'rules-engine-ts';
 
 const root = createRoot('and');
 addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', value: 18 });
 
 const union = addUnionToUnion(root, { connector: 'or' });
-addRuleToUnion(union, { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true });
-addRuleToUnion(union, { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true });
+addRulesToUnion(union, [
+  { type: 'string', field: 'name', value: 'bob', operator: 'equals_to', ignore_case: true },
+  { type: 'string', field: 'name', value: 'alice', operator: 'equals_to', ignore_case: true },
+]);
 
 const pass = run(root, { age: 19, name: 'Bob' });
 const fail = run(root, { age: 19, name: 'Carol' });
@@ -397,7 +637,7 @@ All these updates are turned on by default. You can disable them by passing in a
 
 > Note: This function mutates the input union. Clone the union before passing it in if you want to maintain its original state.
 
-```js
+```ts
 import { addRuleToUnion, addUnionToUnion, createRoot, normalize } from 'rules-engine-ts';
 
 import { v4 as uuidv4 } from 'uuid';
@@ -743,14 +983,14 @@ console.log(unionAfterAdding);
   id: 'd2ce2a4e-ec53-4a64-9677-e9051c634bd1',
   parent_id: '8b32fdc4-8e92-424f-9c00-1204838759e0',
   connector: 'or',
-  rules: [],
-};
+  rules: []
+}
 ```
 
 ## To Do
 
+- [ ] Create recipe examples
 - [ ] Create function to detect conflicting or redundant rules
-
 - [ ] Create a UI builder tool
 
 ## Authors
