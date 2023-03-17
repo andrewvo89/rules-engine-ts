@@ -18,6 +18,7 @@
 - [About](#about)
 - [Terminology](#terminology)
 - [Basic Usage](#basic-usage)
+- [UI Implementation Example](#ui-implementation-example)
 - [Installation](#installation)
 - [Usage](#usage)
 - [Rules Specification](#rule-specification)
@@ -100,52 +101,124 @@ console.log(pass); // true
 console.log(fail); // false
 ```
 
-If we console log the root we can see what our rules look like:
+This is what the state of the Rule Engine looks like:
 
-```js
+```json
 {
-  entity: "root_union",
-  id: "0d7428af-10e4-481b-84a7-056946bd4f12",
-  connector: "and",
-  rules: [
+  "entity": "root_union",
+  "id": "0d7428af-10e4-481b-84a7-056946bd4f12",
+  "connector": "and",
+  "rules": [
     {
-      entity: "rule",
-      id: "82e96b0d-886e-4a2e-bf8c-f81b02ef11ce",
-      parent_id: "0d7428af-10e4-481b-84a7-056946bd4f12",
-      type: "number",
-      field: "age",
-      operator: "greater_than",
-      value: 18
+      "entity": "rule",
+      "id": "82e96b0d-886e-4a2e-bf8c-f81b02ef11ce",
+      "parent_id": "0d7428af-10e4-481b-84a7-056946bd4f12",
+      "type": "number",
+      "field": "age",
+      "operator": "greater_than",
+      "value": 18
     },
     {
-      entity: "union",
-      id: "7c493486-409b-48df-bd66-7f4a16500c5e",
-      parent_id: "0d7428af-10e4-481b-84a7-056946bd4f12",
-      connector: "or",
-      rules: [
+      "entity": "union",
+      "id": "7c493486-409b-48df-bd66-7f4a16500c5e",
+      "parent_id": "0d7428af-10e4-481b-84a7-056946bd4f12",
+      "connector": "or",
+      "rules": [
         {
-          entity: "rule",
-          id: "3abc4e64-d6c8-4303-9d07-b573a571f19a",
-          parent_id: "7c493486-409b-48df-bd66-7f4a16500c5e",
-          type: "string",
-          field: "name",
-          operator: "equals_to",
-          value: "bob",
-          ignore_case: true
+          "entity": "rule",
+          "id": "3abc4e64-d6c8-4303-9d07-b573a571f19a",
+          "parent_id": "7c493486-409b-48df-bd66-7f4a16500c5e",
+          "type": "string",
+          "field": "name",
+          "operator": "equals_to",
+          "value": "bob",
+          "ignore_case": true
         },
         {
-          entity: "rule",
-          id: "a3995445-55ca-49b2-8381-3d6758750413",
-          parent_id: "7c493486-409b-48df-bd66-7f4a16500c5e",
-          type: "string",
-          field: "name",
-          operator: "equals_to",
-          value: "alice",
-          ignore_case: true
+          "entity": "rule",
+          "id": "a3995445-55ca-49b2-8381-3d6758750413",
+          "parent_id": "7c493486-409b-48df-bd66-7f4a16500c5e",
+          "type": "string",
+          "field": "name",
+          "operator": "equals_to",
+          "value": "alice",
+          "ignore_case": true
         }
       ]
     }
   ]
+}
+```
+
+## UI Implementation Example
+
+![rules-engine-ui-example](https://user-images.githubusercontent.com/48583281/225778535-c01233d0-52cb-4443-b9b3-d5d61c9dd948.gif)
+
+The rules can then be persisted into a database in JSON format:
+
+```json
+{
+  "entity": "root_union",
+  "id": "598444ae-032c-4ae5-85da-644cf90ab920",
+  "connector": "or",
+  "rules": [
+    {
+      "entity": "rule",
+      "id": "03fcb9b5-a3fe-4d63-97f3-dfce431c331d",
+      "parent_id": "598444ae-032c-4ae5-85da-644cf90ab920",
+      "type": "string",
+      "field": "user_display_name",
+      "operator": "equals_to",
+      "value": "Alice",
+      "ignore_case": true
+    },
+    {
+      "id": "d60639aa-8239-40c7-9cc3-ec89f8f8c58d",
+      "entity": "union",
+      "connector": "and",
+      "parent_id": "598444ae-032c-4ae5-85da-644cf90ab920",
+      "rules": [
+        {
+          "entity": "rule",
+          "id": "1821d9da-9f37-4689-a118-bf436ca37e89",
+          "parent_id": "d60639aa-8239-40c7-9cc3-ec89f8f8c58d",
+          "type": "string",
+          "field": "user_display_name",
+          "operator": "equals_to",
+          "value": "Bob",
+          "ignore_case": true
+        },
+        {
+          "entity": "rule",
+          "id": "c2a058ab-6005-44a4-94ae-b75736dce536",
+          "parent_id": "d60639aa-8239-40c7-9cc3-ec89f8f8c58d",
+          "type": "number",
+          "field": "total_challenges",
+          "operator": "greater_than_or_equal_to",
+          "value": 5
+        }
+      ]
+    }
+  ]
+}
+```
+
+At a later date, the rules can retrieved from the database and can be run by the rules engine like this:
+
+```js
+import { run } from 'rules-engine-ts';
+
+const rules = getRulesFromDatabase();
+
+const pass = run(rules, { user_display_name: 'alice', total_challenges: 0 });
+const fail = run(rules, { user_display_name: 'bob', total_challenges: 5 });
+
+if (pass) {
+  // do something
+}
+
+if (fail) {
+  //do somehting else
 }
 ```
 
@@ -173,12 +246,12 @@ const root = createRoot({ connector: 'and' });
 
 State of the Rules Engine:
 
-```js
+```json
 {
-  entity: "root_union",
-  id: "0d7428af-10e4-481b-84a7-056946bd4f12",
-  connector: "and",
-  rules: []
+  "entity": "root_union",
+  "id": "0d7428af-10e4-481b-84a7-056946bd4f12",
+  "connector": "and",
+  "rules": []
 }
 ```
 
@@ -198,20 +271,20 @@ addRuleToUnion(root, { type: 'number', field: 'age', operator: 'greater_than', v
 
 State of the Rules Engine:
 
-```js
+```json
 {
-  entity: "root_union",
-  id: "0d7428af-10e4-481b-84a7-056946bd4f12",
-  connector: "and",
-  rules: [
+  "entity": "root_union",
+  "id": "0d7428af-10e4-481b-84a7-056946bd4f12",
+  "connector": "and",
+  "rules": [
     {
-      entity: "rule",
-      id: "82e96b0d-886e-4a2e-bf8c-f81b02ef11ce",
-      parent_id: "0d7428af-10e4-481b-84a7-056946bd4f12",
-      type: "number",
-      field: "age",
-      operator: "greater_than",
-      value: 18,
+      "entity": "rule",
+      "id": "82e96b0d-886e-4a2e-bf8c-f81b02ef11ce",
+      "parent_id": "0d7428af-10e4-481b-84a7-056946bd4f12",
+      "type": "number",
+      "field": "age",
+      "operator": "greater_than",
+      "value": 18
     }
   ]
 }
@@ -236,31 +309,31 @@ addRulesToUnion(root, [
 
 State of the Rules Engine:
 
-```js
+```json
 {
-  entity: 'root_union',
-  id: '61dadd25-22a0-4e84-abe5-92fcfd6cac9e',
-  connector: 'and',
-  rules: [
+  "entity": "root_union",
+  "id": "61dadd25-22a0-4e84-abe5-92fcfd6cac9e",
+  "connector": "and",
+  "rules": [
     {
-      entity: 'rule',
-      id: '50158f7e-1d87-4ca8-aaca-ef1bbb41c9c2',
-      parent_id: '61dadd25-22a0-4e84-abe5-92fcfd6cac9e',
-      type: 'string',
-      field: 'name',
-      operator: 'equals_to',
-      value: 'bob',
-      ignore_case: true
+      "entity": "rule",
+      "id": "50158f7e-1d87-4ca8-aaca-ef1bbb41c9c2",
+      "parent_id": "61dadd25-22a0-4e84-abe5-92fcfd6cac9e",
+      "type": "string",
+      "field": "name",
+      "operator": "equals_to",
+      "value": "bob",
+      "ignore_case": true
     },
     {
-      entity: 'rule',
-      id: '5f6ac1d1-7ce7-40a5-a94c-5e4a47a45e28',
-      parent_id: '61dadd25-22a0-4e84-abe5-92fcfd6cac9e',
-      type: 'string',
-      field: 'name',
-      operator: 'equals_to',
-      value: 'alice',
-      ignore_case: true
+      "entity": "rule",
+      "id": "5f6ac1d1-7ce7-40a5-a94c-5e4a47a45e28",
+      "parent_id": "61dadd25-22a0-4e84-abe5-92fcfd6cac9e",
+      "type": "string",
+      "field": "name",
+      "operator": "equals_to",
+      "value": "alice",
+      "ignore_case": true
     }
   ]
 }
@@ -284,37 +357,37 @@ addRuleToUnion(union, { type: 'string', field: 'name', value: 'alice', operator:
 
 State of the Rules Engine:
 
-```js
+```json
 {
-  entity: "root_union",
-  id: "0d7428af-10e4-481b-84a7-056946bd4f12",
-  connector: "and",
-  rules: [
+  "entity": "root_union",
+  "id": "0d7428af-10e4-481b-84a7-056946bd4f12",
+  "connector": "and",
+  "rules": [
     {
-      entity: "union",
-      id: "7c493486-409b-48df-bd66-7f4a16500c5e",
-      parent_id: "0d7428af-10e4-481b-84a7-056946bd4f12",
-      connector: "or",
-      rules: [
+      "entity": "union",
+      "id": "7c493486-409b-48df-bd66-7f4a16500c5e",
+      "parent_id": "0d7428af-10e4-481b-84a7-056946bd4f12",
+      "connector": "or",
+      "rules": [
         {
-          entity: "rule",
-          id: "3abc4e64-d6c8-4303-9d07-b573a571f19a",
-          parent_id: "7c493486-409b-48df-bd66-7f4a16500c5e",
-          type: "string",
-          field: "name",
-          operator: "equals_to",
-          value: "bob",
-          ignore_case: true,
+          "entity": "rule",
+          "id": "3abc4e64-d6c8-4303-9d07-b573a571f19a",
+          "parent_id": "7c493486-409b-48df-bd66-7f4a16500c5e",
+          "type": "string",
+          "field": "name",
+          "operator": "equals_to",
+          "value": "bob",
+          "ignore_case": true
         },
         {
-          entity: "rule",
-          id: "a3995445-55ca-49b2-8381-3d6758750413",
-          parent_id: "7c493486-409b-48df-bd66-7f4a16500c5e",
-          type: "string",
-          field: "name",
-          operator: "equals_to",
-          value: "alice",
-          ignore_case: true,
+          "entity": "rule",
+          "id": "a3995445-55ca-49b2-8381-3d6758750413",
+          "parent_id": "7c493486-409b-48df-bd66-7f4a16500c5e",
+          "type": "string",
+          "field": "name",
+          "operator": "equals_to",
+          "value": "alice",
+          "ignore_case": true
         }
       ]
     }
@@ -346,63 +419,63 @@ addRulesToUnion(unions[1], [
 
 State of the Rules Engine:
 
-```js
+```json
 {
-  entity: 'root_union',
-  id: '28a9ae06-594a-4520-8d73-2fd871804634',
-  connector: 'and',
-  rules: [
+  "entity": "root_union",
+  "id": "28a9ae06-594a-4520-8d73-2fd871804634",
+  "connector": "and",
+  "rules": [
     {
-      entity: 'union',
-      id: '8e5e66dd-e86c-4f9e-acc7-7baa852fdfe8',
-      parent_id: '28a9ae06-594a-4520-8d73-2fd871804634',
-      connector: 'or',
-      rules: [
+      "entity": "union",
+      "id": "8e5e66dd-e86c-4f9e-acc7-7baa852fdfe8",
+      "parent_id": "28a9ae06-594a-4520-8d73-2fd871804634",
+      "connector": "or",
+      "rules": [
         {
-          entity: 'rule',
-          id: 'a8ecbafd-0a1a-4e9e-bb70-8bd11a62f274',
-          parent_id: '8e5e66dd-e86c-4f9e-acc7-7baa852fdfe8',
-          type: 'string',
-          field: 'name',
-          operator: 'equals_to',
-          value: 'bob',
-          ignore_case: true
+          "entity": "rule",
+          "id": "a8ecbafd-0a1a-4e9e-bb70-8bd11a62f274",
+          "parent_id": "8e5e66dd-e86c-4f9e-acc7-7baa852fdfe8",
+          "type": "string",
+          "field": "name",
+          "operator": "equals_to",
+          "value": "bob",
+          "ignore_case": true
         },
         {
-          entity: 'rule',
-          id: 'd4fd56bf-af82-4382-a1cb-93d80cb87ef4',
-          parent_id: '8e5e66dd-e86c-4f9e-acc7-7baa852fdfe8',
-          type: 'string',
-          field: 'name',
-          operator: 'equals_to',
-          value: 'alice',
-          ignore_case: true
+          "entity": "rule",
+          "id": "d4fd56bf-af82-4382-a1cb-93d80cb87ef4",
+          "parent_id": "8e5e66dd-e86c-4f9e-acc7-7baa852fdfe8",
+          "type": "string",
+          "field": "name",
+          "operator": "equals_to",
+          "value": "alice",
+          "ignore_case": true
         }
       ]
     },
     {
-      entity: 'union',
-      id: '5e5d7f00-d0f6-40d9-84b3-39600241a92f',
-      parent_id: '28a9ae06-594a-4520-8d73-2fd871804634',
-      connector: 'or',
-      rules: [
+      "entity": "union",
+      "id": "5e5d7f00-d0f6-40d9-84b3-39600241a92f",
+      "parent_id": "28a9ae06-594a-4520-8d73-2fd871804634",
+      "connector": "or",
+      "rules": [
         {
-          entity: 'rule',
-          id: '7ea03690-d9c4-4a3e-97eb-d927cf6845e8',
-          parent_id: '5e5d7f00-d0f6-40d9-84b3-39600241a92f',
-          type: 'number',
-          field: 'age',
-          operator: 'equals_to',
-          value: 18
+          "entity": "rule",
+          "id": "7ea03690-d9c4-4a3e-97eb-d927cf6845e8",
+          "parent_id": "5e5d7f00-d0f6-40d9-84b3-39600241a92f",
+          "type": "number",
+          "field": "age",
+          "operator": "equals_to",
+          "value": 18
         },
         {
-          entity: 'rule',
-          id: 'bb63d7da-b0dc-4d00-824c-4de09151c609',
-          parent_id: '5e5d7f00-d0f6-40d9-84b3-39600241a92f',
-          type: 'number',
-          field: 'age',
-          operator: 'equals_to',
-          value: 21
+          "entity": "rule",
+          "id": "bb63d7da-b0dc-4d00-824c-4de09151c609",
+          "parent_id": "5e5d7f00-d0f6-40d9-84b3-39600241a92f",
+          "type": "number",
+          "field": "age",
+          "operator": "equals_to",
+          "value": 21
         }
       ]
     }
@@ -430,37 +503,37 @@ if (any.entity === 'union') {
 
 State of the Rules Engine:
 
-```js
+```json
 {
-  entity: 'root_union',
-  id: '825ef3d8-3151-4367-b751-1deae8b308c1',
-  connector: 'and',
-  rules: [
+  "entity": "root_union",
+  "id": "825ef3d8-3151-4367-b751-1deae8b308c1",
+  "connector": "and",
+  "rules": [
     {
-      entity: 'union',
-      id: '71b5296a-5358-4399-878d-f535c9f21faf',
-      parent_id: '825ef3d8-3151-4367-b751-1deae8b308c1',
-      connector: 'or',
-      rules: [
+      "entity": "union",
+      "id": "71b5296a-5358-4399-878d-f535c9f21faf",
+      "parent_id": "825ef3d8-3151-4367-b751-1deae8b308c1",
+      "connector": "or",
+      "rules": [
         {
-          entity: 'rule',
-          id: '3cd0463f-c5e7-4dd9-98b8-9e7cf79417b5',
-          parent_id: '71b5296a-5358-4399-878d-f535c9f21faf',
-          type: 'string',
-          field: 'name',
-          operator: 'equals_to',
-          value: 'bob',
-          ignore_case: true
+          "entity": "rule",
+          "id": "3cd0463f-c5e7-4dd9-98b8-9e7cf79417b5",
+          "parent_id": "71b5296a-5358-4399-878d-f535c9f21faf",
+          "type": "string",
+          "field": "name",
+          "operator": "equals_to",
+          "value": "bob",
+          "ignore_case": true
         },
         {
-          entity: 'rule',
-          id: 'f10e7cec-c737-4c2c-b137-d7ab0e26e045',
-          parent_id: '71b5296a-5358-4399-878d-f535c9f21faf',
-          type: 'string',
-          field: 'name',
-          operator: 'equals_to',
-          value: 'alice',
-          ignore_case: true
+          "entity": "rule",
+          "id": "f10e7cec-c737-4c2c-b137-d7ab0e26e045",
+          "parent_id": "71b5296a-5358-4399-878d-f535c9f21faf",
+          "type": "string",
+          "field": "name",
+          "operator": "equals_to",
+          "value": "alice",
+          "ignore_case": true
         }
       ]
     }
@@ -488,38 +561,38 @@ addManyToUnion(root, [
 
 State of the Rules Engine:
 
-```js
+```json
 {
-  entity: 'root_union',
-  id: '26252c95-37da-47d4-b361-7ad82ae13a9b',
-  connector: 'and',
-  rules: [
+  "entity": "root_union",
+  "id": "26252c95-37da-47d4-b361-7ad82ae13a9b",
+  "connector": "and",
+  "rules": [
     {
-      entity: 'rule',
-      id: 'edbf5239-e931-480a-b231-119af2c1a1d1',
-      parent_id: '26252c95-37da-47d4-b361-7ad82ae13a9b',
-      type: 'string',
-      field: 'name',
-      operator: 'equals_to',
-      value: 'bob',
-      ignore_case: true
+      "entity": "rule",
+      "id": "edbf5239-e931-480a-b231-119af2c1a1d1",
+      "parent_id": "26252c95-37da-47d4-b361-7ad82ae13a9b",
+      "type": "string",
+      "field": "name",
+      "operator": "equals_to",
+      "value": "bob",
+      "ignore_case": true
     },
     {
-      entity: 'rule',
-      id: '1e9109fa-30cf-41a9-9e78-e8395a423d6d',
-      parent_id: '26252c95-37da-47d4-b361-7ad82ae13a9b',
-      type: 'string',
-      field: 'name',
-      operator: 'equals_to',
-      value: 'alice',
-      ignore_case: true
+      "entity": "rule",
+      "id": "1e9109fa-30cf-41a9-9e78-e8395a423d6d",
+      "parent_id": "26252c95-37da-47d4-b361-7ad82ae13a9b",
+      "type": "string",
+      "field": "name",
+      "operator": "equals_to",
+      "value": "alice",
+      "ignore_case": true
     },
     {
-      entity: 'union',
-      id: '0bb57d03-ac07-41af-941a-6a2625bac130',
-      parent_id: '26252c95-37da-47d4-b361-7ad82ae13a9b',
-      connector: 'or',
-      rules: []
+      "entity": "union",
+      "id": "0bb57d03-ac07-41af-941a-6a2625bac130",
+      "parent_id": "26252c95-37da-47d4-b361-7ad82ae13a9b",
+      "connector": "or",
+      "rules": []
     }
   ]
 }
@@ -666,35 +739,35 @@ console.log(root); // After normalization
 
 Before normalization:
 
-```js
+```json
 {
-  entity: 'root_union',
-  id: '70cf2539-b960-4831-b0f2-3b201aea550a',
-  connector: 'or',
-  rules: [
+  "entity": "root_union",
+  "id": "70cf2539-b960-4831-b0f2-3b201aea550a",
+  "connector": "or",
+  "rules": [
     {
-      entity: 'rule',
-      id: '4b644371-6bc2-46b1-b855-c2098df80fb3',
-      parent_id: '8ca677c2-b01c-4cf2-91ec-9c95b6ff7dff',
-      type: 'string',
-      field: 'name',
-      operator: 'contains',
-      value: 'bob'
+      "entity": "rule",
+      "id": "4b644371-6bc2-46b1-b855-c2098df80fb3",
+      "parent_id": "8ca677c2-b01c-4cf2-91ec-9c95b6ff7dff",
+      "type": "string",
+      "field": "name",
+      "operator": "contains",
+      "value": "bob"
     },
     {
-      entity: 'union',
-      id: 'c43e8705-6b4b-42b5-941c-3295c17cf5db',
-      parent_id: '70cf2539-b960-4831-b0f2-3b201aea550a',
-      connector: 'invalid',
-      rules: [
+      "entity": "union",
+      "id": "c43e8705-6b4b-42b5-941c-3295c17cf5db",
+      "parent_id": "70cf2539-b960-4831-b0f2-3b201aea550a",
+      "connector": "invalid",
+      "rules": [
         {
-          entity: 'rule',
-          id: '8589e28c-a1d5-4a0b-b930-24c5931eaadb',
-          parent_id: 'c43e8705-6b4b-42b5-941c-3295c17cf5db',
-          type: 'number',
-          field: 'name',
-          operator: 'contains',
-          value: 'alice'
+          "entity": "rule",
+          "id": "8589e28c-a1d5-4a0b-b930-24c5931eaadb",
+          "parent_id": "c43e8705-6b4b-42b5-941c-3295c17cf5db",
+          "type": "number",
+          "field": "name",
+          "operator": "contains",
+          "value": "alice"
         }
       ]
     }
@@ -704,20 +777,20 @@ Before normalization:
 
 After normalization:
 
-```js
+```json
 {
-  entity: 'root_union',
-  id: '70cf2539-b960-4831-b0f2-3b201aea550a',
-  connector: 'or',
-  rules: [
+  "entity": "root_union",
+  "id": "70cf2539-b960-4831-b0f2-3b201aea550a",
+  "connector": "or",
+  "rules": [
     {
-      entity: 'rule',
-      id: '4b644371-6bc2-46b1-b855-c2098df80fb3',
-      parent_id: '70cf2539-b960-4831-b0f2-3b201aea550a',
-      type: 'string',
-      field: 'name',
-      operator: 'contains',
-      value: 'bob'
+      "entity": "rule",
+      "id": "4b644371-6bc2-46b1-b855-c2098df80fb3",
+      "parent_id": "70cf2539-b960-4831-b0f2-3b201aea550a",
+      "type": "string",
+      "field": "name",
+      "operator": "contains",
+      "value": "bob"
     }
   ]
 }
@@ -742,29 +815,29 @@ console.log(root.rules[0]); // After update
 
 Before update:
 
-```js
+```json
 {
-  entity: 'rule',
-  id: 'cc3d4bab-783a-4683-a223-8dee979b0bf0',
-  parent_id: 'e0da0708-1fbf-4e64-887c-d7684b17dd00',
-  type: 'number',
-  field: 'age',
-  operator: 'greater_than',
-  value: 18
+  "entity": "rule",
+  "id": "cc3d4bab-783a-4683-a223-8dee979b0bf0",
+  "parent_id": "e0da0708-1fbf-4e64-887c-d7684b17dd00",
+  "type": "number",
+  "field": "age",
+  "operator": "greater_than",
+  "value": 18
 }
 ```
 
 After update:
 
-```js
+```json
 {
-  entity: 'rule',
-  id: 'cc3d4bab-783a-4683-a223-8dee979b0bf0',
-  parent_id: 'e0da0708-1fbf-4e64-887c-d7684b17dd00',
-  type: 'number',
-  field: 'age',
-  operator: 'less_than',
-  value: 30
+  "entity": "rule",
+  "id": "cc3d4bab-783a-4683-a223-8dee979b0bf0",
+  "parent_id": "e0da0708-1fbf-4e64-887c-d7684b17dd00",
+  "type": "number",
+  "field": "age",
+  "operator": "less_than",
+  "value": 30
 }
 ```
 
@@ -787,25 +860,25 @@ console.log(root.rules[0]); // After update
 
 Before update:
 
-```js
+```json
 {
-  entity: 'union',
-  id: 'b0a289a5-f02e-4bb4-bbbf-d148d1fc570f',
-  parent_id: '1ac8dad7-46c0-430b-9ad1-fdb8f1fd721a',
-  connector: 'and',
-  rules: []
+  "entity": "union",
+  "id": "b0a289a5-f02e-4bb4-bbbf-d148d1fc570f",
+  "parent_id": "1ac8dad7-46c0-430b-9ad1-fdb8f1fd721a",
+  "connector": "and",
+  "rules": []
 }
 ```
 
 After update:
 
-```js
+```json
 {
-  entity: 'union',
-  id: 'b0a289a5-f02e-4bb4-bbbf-d148d1fc570f',
-  parent_id: '1ac8dad7-46c0-430b-9ad1-fdb8f1fd721a',
-  connector: 'or',
-  rules: []
+  "entity": "union",
+  "id": "b0a289a5-f02e-4bb4-bbbf-d148d1fc570f",
+  "parent_id": "1ac8dad7-46c0-430b-9ad1-fdb8f1fd721a",
+  "connector": "or",
+  "rules": []
 }
 ```
 
@@ -939,27 +1012,27 @@ console.log(wideAfterAdding);
 console.log(narrowAfterAdding);
 ```
 
-```js
+```json
 {
-  entity: 'rule',
-  id: '560f4e04-f786-4269-bbdd-704ad9793518',
-  parent_id: '6fa1aaa6-cfab-4647-a30c-a58af3e0a4d4',
-  type: 'number',
-  field: 'age',
-  operator: 'greater_than',
-  value: 18
+  "entity": "rule",
+  "id": "560f4e04-f786-4269-bbdd-704ad9793518",
+  "parent_id": "6fa1aaa6-cfab-4647-a30c-a58af3e0a4d4",
+  "type": "number",
+  "field": "age",
+  "operator": "greater_than",
+  "value": 18
 }
 ```
 
-```js
+```json
 {
-  entity: 'rule',
-  id: '46a36441-3f28-4dd7-8420-b1d584527a74',
-  parent_id: '6fa1aaa6-cfab-4647-a30c-a58af3e0a4d4',
-  type: 'number',
-  field: 'age',
-  operator: 'less_than',
-  value: 30
+  "entity": "rule",
+  "id": "46a36441-3f28-4dd7-8420-b1d584527a74",
+  "parent_id": "6fa1aaa6-cfab-4647-a30c-a58af3e0a4d4",
+  "type": "number",
+  "field": "age",
+  "operator": "less_than",
+  "value": 30
 }
 ```
 
@@ -977,13 +1050,13 @@ const unionAfterAdding = addUnionToUnion(root, union);
 console.log(unionAfterAdding);
 ```
 
-```js
+```json
 {
-  entity: 'union',
-  id: 'd2ce2a4e-ec53-4a64-9677-e9051c634bd1',
-  parent_id: '8b32fdc4-8e92-424f-9c00-1204838759e0',
-  connector: 'or',
-  rules: []
+  "entity": "union",
+  "id": "d2ce2a4e-ec53-4a64-9677-e9051c634bd1",
+  "parent_id": "8b32fdc4-8e92-424f-9c00-1204838759e0",
+  "connector": "or",
+  "rules": []
 }
 ```
 
