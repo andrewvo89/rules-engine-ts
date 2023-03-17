@@ -211,7 +211,7 @@ import { run } from 'rules-engine-ts';
 const rules = getRulesFromDatabase();
 
 const pass = run(rules, { user_display_name: 'alice', total_challenges: 0 });
-const fail = run(rules, { user_display_name: 'bob', total_challenges: 5 });
+const fail = run(rules, { user_display_name: 'bob', total_challenges: 0 });
 
 if (pass) {
   // do something
