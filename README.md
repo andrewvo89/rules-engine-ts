@@ -152,7 +152,7 @@ This is what the state of the Rule Engine looks like:
 
 ## UI Implementation Example
 
-![rules-engine-ui-example](https://user-images.githubusercontent.com/48583281/225778535-c01233d0-52cb-4443-b9b3-d5d61c9dd948.gif)
+![rules-engine-ui-example](https://user-images.githubusercontent.com/48583281/225781473-7ab13ad4-901f-44c6-bd1d-1ac2832106a2.gif)
 
 The rules can then be persisted into a database in JSON format:
 
