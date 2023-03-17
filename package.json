@@ -1,6 +1,6 @@
 {
   "name": "rules-engine-ts",
-  "version": "2.0.3",
+  "version": "2.0.4",
   "repository": "https://github.com/andrewvo89/rules-engine-ts.git",
   "author": "Andrew Vo-Nguyen <hello@andrewvo.co> (https://andrewvo.co)",
   "description": "Strongly typed rules engine for evaluating deep and complex rules",
